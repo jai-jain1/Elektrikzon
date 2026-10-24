@@ -1,0 +1,12 @@
+# Netlify build settings for the ElektrikZone website.
+# Netlify detects Next.js and runs it with its Next.js runtime (server
+# pages, 5-minute refresh, the Sanity webhook route and /studio all work).
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # @sanity/image-url needs Node 20.19+; pin a current LTS.
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"

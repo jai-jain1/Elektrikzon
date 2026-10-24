@@ -7,7 +7,7 @@ Website for ElektrikZone, an electrical products supplier (wholesale and retail)
 - Photography: 18 images rendered locally by the render studio (`npm run dev` → http://localhost:3000/render, scenes in `lib/render/`), saved to `public/shots`. Slots are listed in `data/shots.ts`; any image can be replaced by a real photo with the same file name.
 - Products, categories, brands, reels and site settings: Sanity (free plan), with the Studio embedded at `/studio`
 - Quote flow: WhatsApp only (no database, no login, no payments)
-- Hosting: Vercel via GitHub
+- Hosting: Netlify (free plan) via GitHub, settings in `netlify.toml`; Vercel also works
 
 ## Setup (PowerShell)
 
@@ -25,7 +25,7 @@ Until it is set, the site runs on the built-in sample catalogue (`data/fallback-
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` |
 | `NEXT_PUBLIC_SANITY_API_VERSION` | Fixed date, `2024-10-01` |
 | `SANITY_REVALIDATE_SECRET` | Long random string, same value as the webhook secret |
-| `NEXT_PUBLIC_SITE_URL` | Public URL without trailing slash (e.g. `https://elektrikzone.vercel.app`) |
+| `NEXT_PUBLIC_SITE_URL` | Public URL without trailing slash (e.g. `https://elektrikzone.netlify.app`) |
 
 ## Run and build
 
@@ -49,7 +49,7 @@ The seed contains Site settings (with `[ADD: ...]` placeholders), 5 categories, 
 ### Allow the local Studio to talk to Sanity
 
 In https://www.sanity.io/manage → your project → **API** → **CORS origins** → **Add CORS origin**:
-`http://localhost:3000`, tick **Allow credentials**. Repeat later for the Vercel domain.
+`http://localhost:3000`, tick **Allow credentials**. Repeat later for your Netlify address and your domain.
 
 ### Content model
 
@@ -97,7 +97,7 @@ Source tokens from links like `/#ig-bio`, `/#ig-reel3`, `/#ig-story2`, `/#qr-cou
 ## More docs
 
 - STUDIO_GUIDE.md: for the shop owner
-- DEPLOY.md: GitHub, Vercel, CORS, webhook, domain
+- DEPLOY.md: Netlify import, environment variables, CORS, webhook, domain
 - HIGGSFIELD_SHOTS.md: the 18 image prompts and how to add the images
 - LAUNCH_CHECKLIST.md: placeholders, photos to shoot, test checklist, Instagram links
 
