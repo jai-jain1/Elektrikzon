@@ -26,6 +26,9 @@ export const CONFIG: SiteSettings = {
   instagramUrl: "", // [ADD: Instagram profile URL]
   instagramHandle: "", // [ADD: Instagram handle]
   gstNumber: "", // [ADD: GSTIN]
+  upiId: "", // [ADD: UPI ID, e.g. elektrikzone@okaxis] turns on Pay by UPI
+  upiPayeeName: "ElektrikZone",
+  orderNote: "", // [ADD: delivery charges and pickup timings]
 
   brandsStocked: [], // [ADD: brands stocked, plain text]
   strongestLines: [

@@ -85,7 +85,7 @@ export function QuickView({ product, onClose }: { product: Product | null; onClo
                 {localized(lang, p.name, p.nameHi)}
               </h2>
               {p.brand && <p className="mt-1 text-sm text-muted">{p.brand.name}</p>}
-              <PriceLine mrp={p.mrp} className="mt-4" />
+              <PriceLine product={p} className="mt-4" large />
               {p.description && (
                 <p className="mt-4 text-sm leading-relaxed text-muted">{localized(lang, p.description, p.descriptionHi)}</p>
               )}

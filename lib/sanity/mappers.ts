@@ -1,5 +1,5 @@
-import { FINISHES, USES, type Brand, type Category, type Finish, type Product, type Reel, type Subcategory, type Use } from "@/types/catalog";
-import type { SanityBrand, SanityCategory, SanityProduct, SanityReel, SanitySubcategory } from "./types";
+import { FINISHES, USES, type Brand, type Campaign, type Category, type Finish, type Product, type Reel, type Subcategory, type Use } from "@/types/catalog";
+import type { SanityBrand, SanityCampaign, SanityCategory, SanityProduct, SanityReel, SanitySubcategory } from "./types";
 import { toSiteImage } from "./image";
 
 // Sanity results -> site types. Anything incomplete is dropped rather than
@@ -58,10 +58,40 @@ export function mapProduct(p: SanityProduct): Product | null {
       .map((img, i) => toSiteImage(img, i === 0 ? name : `${name}, photo ${i + 1}`))
       .filter((img): img is NonNullable<typeof img> => img !== null),
     mrp: typeof p.mrp === "number" && p.mrp > 0 ? p.mrp : undefined,
+    price: typeof p.price === "number" && p.price > 0 ? p.price : undefined,
     featured: p.featured === true,
     // Treat anything not explicitly switched off as a sample.
     sample: p.sample !== false,
     inStockNote: p.inStockNote || undefined,
+  };
+}
+
+export function mapCampaign(c: SanityCampaign): Campaign | null {
+  if (!nonEmpty(c.title) || !nonEmpty(c.slug)) return null;
+  return {
+    id: c.id,
+    slug: c.slug,
+    title: c.title,
+    titleHi: c.titleHi || undefined,
+    eyebrow: c.eyebrow || undefined,
+    eyebrowHi: c.eyebrowHi || undefined,
+    description: c.description || undefined,
+    descriptionHi: c.descriptionHi || undefined,
+    image: toSiteImage(c.heroImage, c.title) ?? undefined,
+    startsAt: c.startsAt || undefined,
+    endsAt: c.endsAt || undefined,
+    showOnHomepage: c.showOnHomepage !== false,
+    offerNote: c.offerNote || undefined,
+    offerNoteHi: c.offerNoteHi || undefined,
+    items: (c.items ?? [])
+      .filter((i): i is { productId: string; offerPrice?: number | null; badge?: string } => nonEmpty(i.productId))
+      .map((i) => ({
+        productId: i.productId,
+        offerPrice: typeof i.offerPrice === "number" && i.offerPrice > 0 ? i.offerPrice : undefined,
+        badge: i.badge || undefined,
+      })),
+    order: c.order ?? 100,
+    active: c.active === true,
   };
 }
 

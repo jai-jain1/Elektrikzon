@@ -20,6 +20,13 @@ Replace `elektrikzone.in` below with your real domain (or the `.vercel.app` addr
 | `[ADD: Brands stocked]` | Brands stocked (delete the seeded “[ADD: Brand 1/2]”) |
 | `[ADD: Delivery areas]`, `[ADD: Delivery promise]` | Delivery areas, Delivery promise |
 | `[ADD: Quote response time]` | Quote response time |
+| Checkout shows “Online payment isn’t switched on yet” | UPI ID (and UPI payee name) |
+| `[ADD: Delivery charges and pickup timings]` at checkout | Order note |
+
+### In the Studio → Campaigns and offers
+| Placeholder | Where |
+| --- | --- |
+| `[ADD: offer terms…]` | Diwali Lights draft → Offer terms; check dates and offer prices, then Publish |
 
 ### In the Studio → Products
 | Placeholder | Where |
@@ -111,6 +118,7 @@ Every link adds a source tag that appears at the end of WhatsApp quotes (`Ref: E
 | Reel 1, 2, 3… (comment / bio pin) | `https://elektrikzone.in/#ig-reel1`, `#ig-reel2`, `#ig-reel3` | `EZ-IG-REEL1` … |
 | A product in a story | `https://elektrikzone.in/products/PRODUCT-ID#ig-story1` | product page + `EZ-IG-STORY1` |
 | Post captions (Copy Instagram caption button) | `…/products/PRODUCT-ID#ig-post` | `EZ-IG-POST` |
+| A festival offer | `https://elektrikzone.in/offers/diwali-lights#ig-diwali` | `EZ-IG-DIWALI` |
 | Printed QR at the counter | `https://elektrikzone.in/#qr-counter` (download from Contact page) | `EZ-QR-COUNTER` |
 
 Tips: number reels in the same order as the **Sort order** in the Studio’s Reels list. `#ig-reel3` also scrolls to the third tile on the Reels Wall. Use lowercase letters, numbers and dashes only (e.g. `#ig-diwali-offer`).

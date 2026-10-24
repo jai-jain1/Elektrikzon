@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useQuote, MAX_QTY } from "@/lib/quote";
+import { useQuote, bagTotal, MAX_QTY } from "@/lib/quote";
+import { formatINR } from "@/lib/money";
 import { useUI } from "@/lib/ui";
 import { fmt, useT } from "@/lib/i18n";
 import { useIsLite, useLang } from "@/lib/prefs";
@@ -15,9 +16,13 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { copyText } from "@/lib/clipboard";
 import { useSettings } from "@/components/providers/Providers";
 import { Placeholder } from "@/components/ui/Placeholder";
+import { Checkout } from "@/components/quote/Checkout";
 import { CloseIcon, CopyIcon, MinusIcon, PlusIcon, TrashIcon, WhatsAppIcon } from "@/components/ui/icons";
 
-/** Slide-in quote basket with the WhatsApp message builder. */
+/**
+ * Slide-in bag / quote list. Priced items can be paid by UPI (Checkout);
+ * anything else goes to WhatsApp as a quote request.
+ */
 export function QuoteDrawer() {
   const t = useT();
   const lang = useLang();
@@ -30,6 +35,7 @@ export function QuoteDrawer() {
   const [name, setName] = useState("");
   const [area, setArea] = useState("");
   const [showPreview, setShowPreview] = useState(false);
+  const [step, setStep] = useState<"list" | "checkout">("list");
   const panelRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => setOpen(false), [setOpen]);
@@ -46,6 +52,15 @@ export function QuoteDrawer() {
   };
 
   const count = items.length;
+  const total = bagTotal(items);
+  const anyPriced = items.some((i) => typeof i.unitPrice === "number");
+  const canCheckout = total !== null && !!s.upiId;
+  const titleKey = total !== null ? "bag.title" : anyPriced ? "list.title" : "quote.title";
+
+  // Always reopen on the list; leave checkout if the bag stops being payable.
+  useEffect(() => {
+    if (!open || !canCheckout) setStep("list");
+  }, [open, canCheckout]);
   const ease = [0.22, 1, 0.36, 1] as const;
 
   return (
@@ -74,7 +89,7 @@ export function QuoteDrawer() {
             <header className="flex items-center justify-between border-b px-5 py-4 hairline">
               <div>
                 <h2 id="quote-title" className="text-2xl leading-tight">
-                  {t("quote.title")}
+                  {t(step === "checkout" ? "checkout.title" : titleKey)}
                 </h2>
                 <p className="text-xs text-muted">{count === 1 ? t("quote.item1") : fmt(t("quote.items"), { n: String(count) })}</p>
               </div>
@@ -83,6 +98,18 @@ export function QuoteDrawer() {
               </button>
             </header>
 
+            {step === "checkout" && total !== null ? (
+              <Checkout
+                items={items}
+                total={total}
+                onBack={() => setStep("list")}
+                onDone={() => {
+                  clear();
+                  close();
+                }}
+              />
+            ) : (
+            <>
             <div className="flex-1 overflow-y-auto px-5 py-4">
               {count === 0 ? (
                 <div className="py-10 text-center">
@@ -103,6 +130,13 @@ export function QuoteDrawer() {
                             <p className="text-sm font-medium text-fg">{title}</p>
                             {item.productId && <p className="mt-0.5 text-[0.7rem] text-muted">ID: {item.productId}</p>}
                             {item.detail && <p className="mt-1 text-xs leading-relaxed text-muted">{item.detail}</p>}
+                            {typeof item.unitPrice === "number" && (
+                              <p className="mt-1 text-xs tabular-nums text-muted">
+                                {formatINR(item.unitPrice)} × {item.qty} ={" "}
+                                <span className="text-fg">{formatINR(item.unitPrice * item.qty)}</span>
+                                {item.offerCampaign ? ` · ${fmt(t("price.offer"), { campaign: item.offerCampaign })}` : ""}
+                              </p>
+                            )}
                           </div>
                           <button
                             type="button"
@@ -170,7 +204,18 @@ export function QuoteDrawer() {
                 </ol>
               )}
 
-              {count > 0 && (
+              {total !== null && (
+                <div className="mt-4 flex items-baseline justify-between rounded-xl bg-elev px-4 py-3">
+                  <span className="text-sm text-muted">{t("checkout.total")}</span>
+                  <span className="text-lg font-semibold tabular-nums">{formatINR(total)}</span>
+                </div>
+              )}
+
+              {count > 0 && !canCheckout && anyPriced && (
+                <p className="mt-4 text-xs leading-relaxed text-muted">{t(total === null ? "checkout.mixed" : "checkout.noUpi")}</p>
+              )}
+
+              {count > 0 && !canCheckout && (
                 <div className="mt-6 space-y-3">
                   <label className="block text-xs text-muted">
                     {t("quote.name")}
@@ -212,7 +257,11 @@ export function QuoteDrawer() {
 
             {count > 0 && (
               <footer className="space-y-2 border-t px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] hairline">
-                {href ? (
+                {canCheckout ? (
+                  <button type="button" onClick={() => setStep("checkout")} className="btn-primary w-full">
+                    {t("checkout.cta")}
+                  </button>
+                ) : href ? (
                   <a href={href} target="_blank" rel="noopener noreferrer" className="btn-primary w-full">
                     <WhatsAppIcon size={18} />
                     {t("quote.send")}
@@ -236,6 +285,8 @@ export function QuoteDrawer() {
                   </button>
                 </div>
               </footer>
+            )}
+            </>
             )}
           </motion.div>
         </div>

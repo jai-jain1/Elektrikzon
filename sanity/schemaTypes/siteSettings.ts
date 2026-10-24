@@ -98,6 +98,33 @@ export const siteSettings = defineType({
       validation: placeholderWarning,
     }),
     defineField({
+      name: "upiId",
+      title: "UPI ID for online orders",
+      type: "string",
+      group: "business",
+      description:
+        "e.g. elektrikzone@okaxis. Turns on “Pay by UPI” checkout for products that have a selling price. Leave empty to keep quotes-only.",
+      validation: (rule) =>
+        rule.regex(/^[\w.-]{2,}@[a-zA-Z]\w+$/, { name: "UPI ID" }).error("That does not look like a UPI ID (name@bank)."),
+    }),
+    defineField({
+      name: "upiPayeeName",
+      title: "Name shown in the UPI app",
+      type: "string",
+      group: "business",
+      description: "Usually your business or account name, e.g. ElektrikZone.",
+      initialValue: "ElektrikZone",
+    }),
+    defineField({
+      name: "orderNote",
+      title: "Order and delivery note",
+      type: "text",
+      rows: 2,
+      group: "business",
+      description: "Shown at checkout, e.g. delivery charges, when you deliver, pickup timings. Only promises you can keep.",
+      validation: placeholderWarning,
+    }),
+    defineField({
       name: "gstNumber",
       title: "GSTIN",
       type: "string",

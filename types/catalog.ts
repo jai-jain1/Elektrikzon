@@ -88,13 +88,59 @@ export interface Product {
   descriptionHi?: string;
   /** First image is the main one. Empty array shows "Photo coming soon". */
   images: SiteImage[];
-  /** Only shown when present. Prices are never displayed otherwise. */
+  /** Only shown when present. */
   mrp?: number;
+  /** Selling price for online orders. Empty = “Request trade price”. */
+  price?: number;
+  /** Set while an active campaign offers this product (offer price wins over price). */
+  offer?: ProductOffer;
   featured: boolean;
   /** Sample listings carry a visible "Sample listing" tag. */
   sample: boolean;
   /** Never a stock promise, e.g. "Check availability on WhatsApp". */
   inStockNote?: string;
+}
+
+export interface ProductOffer {
+  campaignSlug: string;
+  campaignTitle: string;
+  campaignTitleHi?: string;
+  /** Offer price; undefined when the campaign only features the product. */
+  price?: number;
+  badge?: string;
+  endsAt?: string;
+}
+
+export interface CampaignItem {
+  productId: string;
+  offerPrice?: number;
+  badge?: string;
+}
+
+export interface Campaign {
+  id: string;
+  slug: string;
+  title: string;
+  titleHi?: string;
+  eyebrow?: string;
+  eyebrowHi?: string;
+  description?: string;
+  descriptionHi?: string;
+  image?: SiteImage;
+  startsAt?: string;
+  endsAt?: string;
+  showOnHomepage: boolean;
+  offerNote?: string;
+  offerNoteHi?: string;
+  items: CampaignItem[];
+  order: number;
+  /** Computed: currently between its start and end. */
+  active: boolean;
+}
+
+/** The price a customer pays online right now, if any. */
+export function effectivePrice(p: Pick<Product, "price" | "offer">): number | undefined {
+  return p.offer?.price ?? p.price;
 }
 
 export interface Reel {

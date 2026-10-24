@@ -64,9 +64,30 @@ export interface SanityProduct {
   descriptionHi?: string;
   images?: SanityImage[] | null;
   mrp?: number | null;
+  price?: number | null;
   featured?: boolean | null;
   sample?: boolean | null;
   inStockNote?: string;
+}
+
+export interface SanityCampaign {
+  id: string;
+  title?: string;
+  titleHi?: string;
+  slug?: string;
+  eyebrow?: string;
+  eyebrowHi?: string;
+  description?: string;
+  descriptionHi?: string;
+  heroImage?: SanityImage | null;
+  startsAt?: string;
+  endsAt?: string;
+  showOnHomepage?: boolean | null;
+  offerNote?: string;
+  offerNoteHi?: string;
+  items?: { productId?: string | null; offerPrice?: number | null; badge?: string }[] | null;
+  order?: number;
+  active?: boolean;
 }
 
 export interface SanityReel {
@@ -91,6 +112,9 @@ export interface SanitySiteSettings {
   instagramUrl?: string;
   instagramHandle?: string;
   gstNumber?: string;
+  upiId?: string;
+  upiPayeeName?: string;
+  orderNote?: string;
   brandsStocked?: string[] | null;
   strongestLines?: string[] | null;
   deliveryAreas?: string[] | null;

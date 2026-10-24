@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { Product } from "@/types/catalog";
+import { effectivePrice, type Product } from "@/types/catalog";
 import { useT } from "@/lib/i18n";
 import { MAX_QTY } from "@/lib/quote";
 import { useAddToQuote } from "@/lib/useAddToQuote";
@@ -70,7 +70,7 @@ export function AddToQuoteForm({ product, className = "", onAdded }: { product: 
         </div>
         <button type="submit" className="btn-primary flex-1">
           <PlusIcon size={16} />
-          {t("quote.add")}
+          {t(typeof effectivePrice(product) === "number" ? "bag.add" : "quote.add")}
         </button>
       </div>
     </form>

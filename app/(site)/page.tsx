@@ -1,4 +1,4 @@
-import { getCategories, getProducts, getReels } from "@/lib/catalog";
+import { getActiveCampaigns, getCategories, getProducts, getReels } from "@/lib/catalog";
 import { getSiteSettings } from "@/lib/settings";
 import { faqJsonLd } from "@/data/faq";
 import { jsonLdString } from "@/lib/seo";
@@ -16,15 +16,17 @@ import { SwitchConfigurator } from "@/components/configurator/SwitchConfigurator
 import { LightLab } from "@/components/lightlab/LightLab";
 import { ScrollFilm } from "@/components/film/ScrollFilm";
 import { Reveal } from "@/components/motion/Reveal";
+import { CampaignBanner } from "@/components/offers/Offers";
 
 export const revalidate = 300;
 
 export default async function HomePage() {
-  const [categories, products, reels, settings] = await Promise.all([
+  const [categories, products, reels, settings, campaigns] = await Promise.all([
     getCategories(),
     getProducts(),
     getReels(),
     getSiteSettings(),
+    getActiveCampaigns(),
   ]);
 
   const counts: Record<string, number> = {};
@@ -37,6 +39,7 @@ export default async function HomePage() {
       {faq.mainEntity.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(faq) }} />}
       <Hero />
       <LightsOnStory />
+      <CampaignBanner campaign={campaigns.find((c) => c.showOnHomepage)} products={products} />
       <TrustStrip />
       <Collections categories={categories} counts={counts} />
       <FinishShowcase />

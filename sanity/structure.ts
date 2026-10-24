@@ -18,6 +18,7 @@ export const structure: StructureResolver = (S) =>
         .title("Site settings")
         .icon(SettingsIcon)
         .child(S.document().schemaType("siteSettings").documentId("siteSettings").title("Site settings")),
+      S.documentTypeListItem("campaign").title("Campaigns and offers").icon(TagIcon),
       S.divider(),
       S.documentTypeListItem("category").title("Categories").icon(FolderIcon),
       S.documentTypeListItem("subcategory").title("Subcategories").icon(SubfolderIcon),

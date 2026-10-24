@@ -22,6 +22,10 @@ export interface QuoteItem {
   finish?: string;
   finishOptions?: string[];
   qty: number;
+  /** Price per unit for online orders (selling or offer price), when the product has one. */
+  unitPrice?: number;
+  /** Campaign whose offer price applies, for the order message. */
+  offerCampaign?: string;
 }
 
 export type NewQuoteItem = Omit<QuoteItem, "key" | "qty"> & { qty?: number };
@@ -49,7 +53,8 @@ export const useQuote = create<QuoteState>()(
         const qty = Math.max(1, Math.min(MAX_QTY, item.qty ?? 1));
         const existing = get().items.find((i) => i.key === key);
         if (existing) {
-          set({ items: get().items.map((i) => (i.key === key ? { ...i, qty: Math.min(MAX_QTY, i.qty + qty) } : i)) });
+          // Keep the latest price (an offer may have started or ended).
+          set({ items: get().items.map((i) => (i.key === key ? { ...i, qty: Math.min(MAX_QTY, i.qty + qty), unitPrice: item.unitPrice, offerCampaign: item.offerCampaign } : i)) });
         } else {
           set({ items: [...get().items, { ...item, key, qty }] });
         }
@@ -79,6 +84,12 @@ export const useQuote = create<QuoteState>()(
     { name: "ez-quote", storage: safeJSONStorage, skipHydration: true, version: 1 },
   ),
 );
+
+/** Bag total when every line has an online price; null otherwise. */
+export function bagTotal(items: QuoteItem[]): number | null {
+  if (!items.length || items.some((i) => typeof i.unitPrice !== "number")) return null;
+  return items.reduce((sum, i) => sum + (i.unitPrice as number) * i.qty, 0);
+}
 
 /** Number of lines in the basket (shown on badges). */
 export function useQuoteCount() {

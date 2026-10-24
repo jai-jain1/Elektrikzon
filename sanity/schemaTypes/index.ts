@@ -4,5 +4,6 @@ import { brand } from "./brand";
 import { product } from "./product";
 import { reel } from "./reel";
 import { siteSettings } from "./siteSettings";
+import { campaign } from "./campaign";
 
-export const schemaTypes = [siteSettings, category, subcategory, brand, product, reel];
+export const schemaTypes = [siteSettings, campaign, category, subcategory, brand, product, reel];

@@ -53,7 +53,7 @@ In https://www.sanity.io/manage → your project → **API** → **CORS origins*
 
 ### Content model
 
-`sanity/schemaTypes/`: `siteSettings` (singleton), `category`, `subcategory`, `brand` (plain text, no logo), `product`, `reel`. Studio menu order is in `sanity/structure.ts`.
+`sanity/schemaTypes/`: `siteSettings` (singleton), `category`, `subcategory`, `brand` (plain text, no logo), `product` (optional `price` for online orders), `reel`, `campaign` (festival offers with dates, offer prices and badges). Studio menu order is in `sanity/structure.ts`.
 
 ### How data reaches the site
 
@@ -74,11 +74,16 @@ Note: the server imports `@sanity/client` directly (not the `next-sanity` barrel
 | `/` | Hero (scroll-scaling photo), Lights-on story, trust strip, bento collections, finish showcase, featured, Switch Configurator, Light Lab, “From wall to switch” film, Who we supply, Why ElektrikZone, Reels Wall, FAQ |
 | `/products` | Catalogue with search and filters (category, type, brand, finish, use) |
 | `/products/[productId]` | Product page (gallery, specs, add to quote, share, Instagram caption) |
+| `/offers`, `/offers/[slug]` | Running festival offers; one offer page (also shows an “ended” notice) |
 | `/designers` | For Designers, with “Paste your product list” |
 | `/contractors` | For Contractors, with the trade account form (opens WhatsApp) |
 | `/about`, `/contact` | About; Contact with QR code |
 | `/studio` | Embedded Sanity Studio |
 | `/api/revalidate` | Sanity webhook endpoint |
+
+## Online orders (UPI, no gateway)
+
+Products with a `price` get **Add to bag**. When every item in the bag is priced and Site settings has a UPI ID, the drawer offers a checkout (`components/quote/Checkout.tsx`): name, delivery or pickup, then a `upi://pay` QR (`lib/upi.ts`) with the exact amount and an order number, and finally an order message to WhatsApp (`buildOrderMessage` in `lib/quote-message.ts`). Nothing is stored; the shop checks the payment and confirms on WhatsApp. Running campaigns set `product.offer`, and `effectivePrice()` in `types/catalog.ts` decides what the customer pays.
 
 ## Motion and performance
 

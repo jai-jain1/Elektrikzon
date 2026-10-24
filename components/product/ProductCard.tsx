@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { Product } from "@/types/catalog";
+import { effectivePrice, type Product } from "@/types/catalog";
 import { fmt, useT } from "@/lib/i18n";
 import { useLang } from "@/lib/prefs";
 import { localized } from "@/lib/localize";
@@ -28,6 +28,7 @@ export function ProductCard({ product, onQuickView, priority }: Props) {
   const category = localized(lang, product.category.title, product.category.titleHi);
   const sub = product.subcategory ? localized(lang, product.subcategory.title, product.subcategory.titleHi) : null;
   const href = `/products/${product.id}`;
+  const buyable = typeof effectivePrice(product) === "number";
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.375rem] bg-elev transition-[transform,box-shadow] duration-500 ease-film hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-30px_rgb(0_0_0/0.9)]">
@@ -39,6 +40,9 @@ export function ProductCard({ product, onQuickView, priority }: Props) {
           className="transition-transform duration-700 ease-film group-hover:scale-[1.04]"
         />
         {product.sample && <SampleTag className="absolute left-3 top-3" />}
+        {product.offer?.badge && (
+          <span className="absolute bottom-3 left-3 rounded-full bg-fg px-2.5 py-1 text-[0.68rem] font-medium text-bg">{product.offer.badge}</span>
+        )}
       </Link>
 
       <div className="flex flex-1 flex-col px-4 pb-4 pt-2 sm:px-5 sm:pb-5">
@@ -55,17 +59,17 @@ export function ProductCard({ product, onQuickView, priority }: Props) {
         <div className="mt-3 flex min-h-[14px] items-center">
           <FinishDots finishes={product.finishes} />
         </div>
-        <PriceLine mrp={product.mrp} className="mt-3" />
+        <PriceLine product={product} className="mt-3" />
 
         <div className="mt-auto flex items-center gap-2 pt-4">
           <button
             type="button"
             onClick={() => addToQuote(product)}
             className="btn-primary min-h-[40px] flex-1 px-3 text-[0.8rem]"
-            aria-label={fmt(t("quote.addNamed"), { name })}
+            aria-label={fmt(t(buyable ? "bag.addNamed" : "quote.addNamed"), { name })}
           >
             <PlusIcon size={16} />
-            {t("quote.add")}
+            {t(buyable ? "bag.add" : "quote.add")}
           </button>
           {onQuickView && (
             <button

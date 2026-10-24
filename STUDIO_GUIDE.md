@@ -124,6 +124,43 @@ The Reels Wall only appears on the homepage once at least one reel is published.
 
 ---
 
-## 7. Important: what never goes in the Studio
+## 7. Sell online: prices and UPI payment
 
-Everything published in the Studio can be read publicly. **Never store customer names, customer phone numbers, quotes or private notes here.** Customer quotes only ever arrive in your WhatsApp.
+No payment gateway is needed. Customers pay you directly by UPI and the order reaches your WhatsApp.
+
+1. **Site settings → Business details → UPI ID**: your shop’s UPI ID (for example `yourshop@okhdfcbank`). Check it carefully: payments go straight to it. **UPI payee name** is the name customers see in their UPI app.
+2. **Site settings → Order note**: delivery charges, delivery areas and pickup timings. Customers see this at checkout.
+3. **Products → open a product → Price (₹)**: the selling price per unit. Products with a price show **Add to bag**; products without one still show **Request trade price**, exactly as before.
+4. **Publish**.
+
+How an order works:
+- The customer adds priced items to the bag, presses **Checkout and pay by UPI**, enters a name and chooses delivery (with an address) or pickup.
+- They see a UPI QR code with the exact total and an order number such as `EZ-261024-K7Q3`. On a phone, **Open UPI app** fills in the amount.
+- After paying, they press **I’ve paid: send order on WhatsApp**. You receive the items, prices, total, order number, delivery or pickup, and their UPI transaction ID if they typed it.
+- **Before you dispatch, check that the money has arrived in your bank or UPI app** (match the amount and order number or transaction ID), then confirm on WhatsApp. The website can’t check payments for you.
+
+If the bag mixes priced and unpriced items, or the UPI ID is empty, the customer sends the list on WhatsApp as a quote instead.
+
+---
+
+## 8. Run a festival offer (Diwali and others)
+
+**Campaigns and offers** in the Studio menu. A draft **Diwali Lights** campaign has been added for you with four lighting products and a festive banner image. Drafts aren’t visible on the website.
+
+1. Open **Campaigns and offers → Diwali Lights**.
+2. **Basics**: check the title, the short line above it (eyebrow), description, **Starts** and **Ends** dates. The offer appears on the website automatically at the start time and disappears at the end time (within 5 minutes).
+3. **Banner image**: replace it with your own photo if you like (landscape, about 2400 px wide).
+4. **Offer terms**: replace `[ADD: …]` with your real terms, e.g. “While stocks last. Prices include GST.”
+5. **Products**: add or remove products. For each one you can set an **Offer price** (what customers pay during the offer; the normal price is shown crossed out) and a short **Badge** such as “Diwali deal”. Leave the offer price empty to use the product’s normal price.
+6. Keep **Show on homepage** on to get the big banner on the homepage (only the first running campaign is shown there).
+7. **Publish**.
+
+The offer gets its own page, e.g. `https://elektrikzone.in/offers/diwali-lights`, and every running offer is listed at `/offers` (**Offers** in the menu). For Instagram, link to `https://elektrikzone.in/offers/diwali-lights#ig-diwali` so WhatsApp orders show `Ref: EZ-IG-DIWALI`.
+
+After the end date the page stays up and says the offer has ended; prices go back to normal. To reuse it next year, change the dates and publish again.
+
+---
+
+## 9. Important: what never goes in the Studio
+
+Everything published in the Studio can be read publicly. **Never store customer names, customer phone numbers, quotes or private notes here.** Customer quotes and orders only ever arrive in your WhatsApp.

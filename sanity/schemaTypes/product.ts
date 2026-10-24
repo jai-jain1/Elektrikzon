@@ -142,6 +142,15 @@ export const product = defineType({
       description: "A few plain sentences. Do not add claims (like ratings or certifications) unless they are true for this product.",
     }),
     defineField({
+      name: "price",
+      title: "Selling price in ₹ (optional)",
+      type: "number",
+      group: "details",
+      description:
+        "Fill this to let customers buy online (Add to bag, pay by UPI). Leave empty to show “Request trade price” and take quotes on WhatsApp.",
+      validation: (rule) => rule.min(1).error("Price must be at least ₹1."),
+    }),
+    defineField({
       name: "mrp",
       title: "MRP in ₹ (optional)",
       type: "number",

@@ -21,6 +21,11 @@ export interface SiteSettings {
   instagramUrl: string;
   instagramHandle: string;
   gstNumber: string;
+  /** UPI ID for online orders (empty = quotes only). */
+  upiId: string;
+  upiPayeeName: string;
+  /** Delivery / pickup note shown at checkout. */
+  orderNote: string;
 
   brandsStocked: string[];
   strongestLines: string[];

@@ -93,7 +93,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl">{name}</h1>
           {product.brand && <p className="mt-2 text-sm text-muted">{product.brand.name}</p>}
-          <PriceLine mrp={product.mrp} className="mt-5 text-base" />
+          <PriceLine product={product} className="mt-5" large />
           {product.inStockNote && <p className="mt-2 text-sm text-muted">{product.inStockNote}</p>}
           {description && <p className="mt-6 max-w-prose leading-relaxed text-muted">{description}</p>}
 
