@@ -15,10 +15,10 @@ interface FaqItem {
 export const FAQ: FaqItem[] = [
   {
     id: "prices",
-    q: { en: "Why don’t you show prices online?", hi: "आप ऑनलाइन कीमत क्यों नहीं दिखाते?" },
+    q: { en: "Why do some products have no price?", hi: "कुछ प्रोडक्ट की कीमत क्यों नहीं दिखती?" },
     a: {
-      en: "Trade prices depend on brand, quantity and current stock, so we quote them on request. Where a product has an MRP, it is shown on its page. Add items to your quote list and send it on WhatsApp for a price.",
-      hi: "ट्रेड प्राइस ब्रांड, मात्रा और मौजूदा स्टॉक पर निर्भर करते हैं, इसलिए हम पूछने पर बताते हैं। जिस प्रोडक्ट का MRP है, वह उसके पेज पर दिखता है। कीमत के लिए आइटम कोटेशन लिस्ट में जोड़ें और WhatsApp पर भेजें।",
+      en: "Products with a price can be bought online and paid for by UPI. Trade prices for other products depend on brand, quantity and current stock, so we quote them on request: add them to your list and send it on WhatsApp.",
+      hi: "जिन प्रोडक्ट की कीमत दिखती है, उन्हें ऑनलाइन खरीदकर UPI से पे कर सकते हैं। बाकी प्रोडक्ट का ट्रेड प्राइस ब्रांड, मात्रा और स्टॉक पर निर्भर करता है, इसलिए हम पूछने पर बताते हैं: उन्हें लिस्ट में जोड़ें और WhatsApp पर भेजें।",
     },
   },
   {

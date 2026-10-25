@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { ContactPage } from "@/components/contact/ContactPage";
+import { FaqSection } from "@/components/home/FaqSection";
+import { getSiteSettings } from "@/lib/settings";
+import { faqJsonLd } from "@/data/faq";
+import { jsonLdString } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -10,6 +14,13 @@ export const metadata: Metadata = {
   openGraph: { title: "Contact · ElektrikZone", url: "/contact" },
 };
 
-export default function Page() {
-  return <ContactPage />;
+export default async function Page() {
+  const faq = faqJsonLd(await getSiteSettings());
+  return (
+    <>
+      {faq.mainEntity.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(faq) }} />}
+      <ContactPage />
+      <FaqSection />
+    </>
+  );
 }

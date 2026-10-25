@@ -68,6 +68,8 @@ export const SHOTS = {
   filmWire: shot({ id: "film-wire", file: "film-wire.webp", alt: "Conduits and wires running through an unfinished wall", aspect: "4 / 5", kind: "wire", prompt: `Unfinished grey wall with neatly chased channels holding grey conduit pipes and red, black and blue wires, raking side light, clean construction detail. ${STYLE}` }),
   filmProtect: shot({ id: "film-protect", file: "film-protect.webp", alt: "A distribution board with a row of MCBs", aspect: "4 / 5", kind: "mcb", prompt: `Close-up of a clean distribution board with a neat row of plain white miniature circuit breakers, one small green indicator lit, dark surroundings, no brand marks. ${STYLE}` }),
   filmFinish: shot({ id: "film-finish", file: "film-finish.webp", alt: "A finished switch plate on a painted wall with soft light", aspect: "4 / 5", kind: "plate", prompt: `A finished graphite modular switch plate on a smooth painted wall, soft neutral light from a wall washer above, calm and complete. ${STYLE}` }),
+  // Still frame of the hero film (Pexels video 29466012, free licence), shown until it plays.
+  heroRoom: shot({ id: "hero-room", file: "hero-room.webp", alt: "A modern living room with a chandelier, downlights and a marble feature wall", aspect: "16 / 9", kind: "room", prompt: "Frame from the hero video." }),
   campaignLights: shot({ id: "campaign-lights", file: "campaign-lights.webp", alt: "Warm string lights and lit diyas in a dark room for the festive season", aspect: "16 / 9", kind: "light", prompt: `Festive still life for Diwali: warm string lights draped across a dark wall, a row of small lit clay diyas on a graphite shelf, soft bokeh, calm and premium, no text. ${STYLE}` }),
 } satisfies Record<string, Shot>;
 

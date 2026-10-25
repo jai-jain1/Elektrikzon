@@ -44,7 +44,7 @@ Replace `elektrikzone.in` below with your real domain (or the `.vercel.app` addr
 | `[ADD: Years in business]` | `components/home/WhyElektrikZone.tsx`, `components/about/AboutPage.tsx` |
 | `[ADD: Shop story…]` | `components/about/AboutPage.tsx` |
 | `[ADD: Higgsfield shot · …]` (18 image slots) | `public/shots/` + `src` in `data/shots.ts` (see HIGGSFIELD_SHOTS.md) |
-| Hero video (optional) | `public/video/hero.mp4` + `heroVideo` in `data/config.ts` |
+| Hero video (optional) | Site settings → Homepage → Hero video link, or `public/video/hero-living-room.mp4` |
 
 ---
 

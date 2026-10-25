@@ -71,19 +71,24 @@ Note: the server imports `@sanity/client` directly (not the `next-sanity` barrel
 
 | Route | What it is |
 | --- | --- |
-| `/` | Hero (scroll-scaling photo), Lights-on story, trust strip, bento collections, finish showcase, featured, Switch Configurator, Light Lab, “From wall to switch” film, Who we supply, Why ElektrikZone, Reels Wall, FAQ |
+| `/` | Short on purpose: video hero, running offer banner, shop by category, popular products (2 per row on phones), shop facts |
+| `/configurator`, `/light-lab` | Switch Configurator and Light Lab (moved off the homepage) |
 | `/products` | Catalogue with search and filters (category, type, brand, finish, use) |
 | `/products/[productId]` | Product page (gallery, specs, add to quote, share, Instagram caption) |
 | `/offers`, `/offers/[slug]` | Running festival offers; one offer page (also shows an “ended” notice) |
 | `/designers` | For Designers, with “Paste your product list” |
 | `/contractors` | For Contractors, with the trade account form (opens WhatsApp) |
-| `/about`, `/contact` | About; Contact with QR code |
+| `/about`, `/contact` | About; Contact with QR code and the FAQ |
 | `/studio` | Embedded Sanity Studio |
 | `/api/revalidate` | Sanity webhook endpoint |
 
 ## Online orders (UPI, no gateway)
 
 Products with a `price` get **Add to bag**. When every item in the bag is priced and Site settings has a UPI ID, the drawer offers a checkout (`components/quote/Checkout.tsx`): name, delivery or pickup, then a `upi://pay` QR (`lib/upi.ts`) with the exact amount and an order number, and finally an order message to WhatsApp (`buildOrderMessage` in `lib/quote-message.ts`). Nothing is stored; the shop checks the payment and confirms on WhatsApp. Running campaigns set `product.offer`, and `effectivePrice()` in `types/catalog.ts` decides what the customer pays.
+
+## Hero video
+
+`public/video/hero-living-room.mp4` is Pexels video 29466012 (“Elegant modern living room interior design”, 1280×720, free for commercial use under the Pexels licence; no credit required). `public/shots/hero-room.webp` is a still from it, shown until the video plays and in Lite mode. To use another video, paste a link to an MP4 in Site settings → Homepage → Hero video link, or replace the file and keep the name.
 
 ## Motion and performance
 
@@ -97,7 +102,7 @@ Source tokens from links like `/#ig-bio`, `/#ig-reel3`, `/#ig-story2`, `/#qr-cou
 
 ## Render studio (development only)
 
-`/render` and `/api/dev/save-shot` only work under `npm run dev` and return 404 in production. Open http://localhost:3000/render and press **Render all and save** (or **Re-render** on one card) after changing a scene in `lib/render/scenes.ts`. Images are WebP, written to `public/shots/`. **Record hero video** renders the 8-second hero loop (1920×1080 H.264 MP4, about 2 MB) to `public/video/hero.mp4`; keep the tab visible while it records so it holds 30 fps. The hero plays it muted over the still photo, pauses it off-screen, and skips it in Lite mode. Set `heroVideo: null` in `data/config.ts` to turn it off.
+`/render` and `/api/dev/save-shot` only work under `npm run dev` and return 404 in production. Open http://localhost:3000/render and press **Render all and save** (or **Re-render** on one card) after changing a scene in `lib/render/scenes.ts`. Images are WebP, written to `public/shots/`. **Record hero video** renders the 8-second hero loop (1920×1080 H.264 MP4, about 2 MB) to `public/video/hero.mp4`; keep the tab visible while it records so it holds 30 fps. The current hero uses the Pexels film instead (see Hero video above); to switch back, set `heroVideo: "/video/hero.mp4"`. The hero plays its video muted over the still photo, pauses it off-screen, and skips it in Lite mode. Set `heroVideo: null` in `data/config.ts` to turn it off.
 
 ## More docs
 

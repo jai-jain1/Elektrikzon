@@ -65,17 +65,18 @@ export function ProductCard({ product, onQuickView, priority }: Props) {
           <button
             type="button"
             onClick={() => addToQuote(product)}
-            className="btn-primary min-h-[40px] flex-1 px-3 text-[0.8rem]"
+            className="btn-primary min-h-[40px] min-w-0 flex-1 px-3 text-[0.8rem]"
             aria-label={fmt(t(buyable ? "bag.addNamed" : "quote.addNamed"), { name })}
           >
             <PlusIcon size={16} />
             {t(buyable ? "bag.add" : "quote.add")}
           </button>
+          {/* Phones open the product page instead: two cards per row leave no room. */}
           {onQuickView && (
             <button
               type="button"
               onClick={() => onQuickView(product)}
-              className="icon-btn h-10 w-10 bg-surface"
+              className="icon-btn hidden h-10 w-10 shrink-0 bg-surface sm:inline-flex"
               aria-label={fmt(t("product.quickViewOf"), { name })}
               title={t("product.quickView")}
             >

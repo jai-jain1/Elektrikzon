@@ -1,62 +1,27 @@
-import { getActiveCampaigns, getCategories, getProducts, getReels } from "@/lib/catalog";
-import { getSiteSettings } from "@/lib/settings";
-import { faqJsonLd } from "@/data/faq";
-import { jsonLdString } from "@/lib/seo";
+import { getActiveCampaigns, getCategories, getProducts } from "@/lib/catalog";
 import { Hero } from "@/components/home/Hero";
-import { LightsOnStory } from "@/components/home/LightsOnStory";
-import { TrustStrip } from "@/components/home/TrustStrip";
-import { Collections } from "@/components/home/Collections";
-import { FinishShowcase } from "@/components/home/FinishShowcase";
-import { FeaturedProducts } from "@/components/home/FeaturedProducts";
-import { WhoWeSupply } from "@/components/home/WhoWeSupply";
-import { WhyElektrikZone } from "@/components/home/WhyElektrikZone";
-import { ReelsWall } from "@/components/home/ReelsWall";
-import { FaqSection } from "@/components/home/FaqSection";
-import { SwitchConfigurator } from "@/components/configurator/SwitchConfigurator";
-import { LightLab } from "@/components/lightlab/LightLab";
-import { ScrollFilm } from "@/components/film/ScrollFilm";
-import { Reveal } from "@/components/motion/Reveal";
 import { CampaignBanner } from "@/components/offers/Offers";
+import { CategoryRow } from "@/components/home/CategoryRow";
+import { HomeProducts } from "@/components/home/HomeProducts";
+import { TrustStrip } from "@/components/home/TrustStrip";
 
 export const revalidate = 300;
 
+// Kept short on purpose: hero, running offer, categories, products, shop facts.
+// The configurator and Light Lab have their own pages; the FAQ is on /contact.
 export default async function HomePage() {
-  const [categories, products, reels, settings, campaigns] = await Promise.all([
-    getCategories(),
-    getProducts(),
-    getReels(),
-    getSiteSettings(),
-    getActiveCampaigns(),
-  ]);
+  const [categories, products, campaigns] = await Promise.all([getCategories(), getProducts(), getActiveCampaigns()]);
 
-  const counts: Record<string, number> = {};
-  for (const p of products) counts[p.category.slug] = (counts[p.category.slug] ?? 0) + 1;
-  const featured = products.filter((p) => p.featured).slice(0, 8);
-  const faq = faqJsonLd(settings);
+  // Featured first, then the rest, so the grid is always full.
+  const ordered = [...products.filter((p) => p.featured), ...products.filter((p) => !p.featured)];
 
   return (
     <>
-      {faq.mainEntity.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(faq) }} />}
       <Hero />
-      <LightsOnStory />
       <CampaignBanner campaign={campaigns.find((c) => c.showOnHomepage)} products={products} />
+      <CategoryRow categories={categories} />
+      <HomeProducts products={ordered.slice(0, 8)} />
       <TrustStrip />
-      <Collections categories={categories} counts={counts} />
-      <FinishShowcase />
-      <FeaturedProducts products={featured} />
-      <SwitchConfigurator />
-      <LightLab />
-      <ScrollFilm />
-      <Reveal>
-        <WhoWeSupply />
-      </Reveal>
-      <Reveal>
-        <WhyElektrikZone />
-      </Reveal>
-      <ReelsWall reels={reels} products={products} />
-      <Reveal>
-        <FaqSection />
-      </Reveal>
     </>
   );
 }

@@ -70,11 +70,11 @@ export function BioMode() {
             {t("bio.catalogue")}
             <ArrowRightIcon size={18} className="text-electric" />
           </Link>
-          <Link href="/#configurator" onClick={close} className={link}>
+          <Link href="/configurator" onClick={close} className={link}>
             {t("bio.configurator")}
             <ArrowRightIcon size={18} className="text-electric" />
           </Link>
-          <Link href="/#light-lab" onClick={close} className={link}>
+          <Link href="/light-lab" onClick={close} className={link}>
             {t("bio.lightlab")}
             <ArrowRightIcon size={18} className="text-electric" />
           </Link>
