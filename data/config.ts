@@ -47,7 +47,7 @@ export const CONFIG: SiteSettings = {
   quoteResponseTime: "", // [ADD: how fast you reply to quotes]
 
   // Rendered by the render studio (/render → "Record hero video"). Set to null for the still photo only.
-  heroVideo: "/video/hero-living-room.mp4",
+  heroVideo: "/video/hero-marble-apartment.mp4",
   headlines: [
     "Light, power and control, chosen with care.",
     "Everything behind the wall, and everything on it.",

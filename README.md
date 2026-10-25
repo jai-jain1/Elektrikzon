@@ -88,7 +88,7 @@ Products with a `price` get **Add to bag**. When every item in the bag is priced
 
 ## Hero video
 
-`public/video/hero-living-room.mp4` is Pexels video 29466012 (“Elegant modern living room interior design”, 1280×720, free for commercial use under the Pexels licence; no credit required). `public/shots/hero-room.webp` is a still from it, shown until the video plays and in Lite mode. To use another video, paste a link to an MP4 in Site settings → Homepage → Hero video link, or replace the file and keep the name.
+`public/video/hero-marble-apartment.mp4` is Pexels video 11630727 (“Showcase of modern home interior”, 1920×1080, about 8 MB; skipped for visitors with Data Saver on; free for commercial use under the Pexels licence; no credit required). `public/shots/hero-room.webp` is a still from it, shown until the video plays and in Lite mode. To use another video, paste a link to an MP4 in Site settings → Homepage → Hero video link, or replace the file and keep the name.
 
 ## Motion and performance
 

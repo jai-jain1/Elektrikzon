@@ -5,11 +5,18 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Muted looping hero film layered over the hero photograph. It fades in
  * only once it is actually playing (so there is never a black flash), and
- * pauses when scrolled out of view or when the tab is hidden.
+ * pauses when scrolled out of view or when the tab is hidden. Skipped for
+ * visitors with Data Saver on (the still photo stays instead).
  */
 export function HeroVideo({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [allowed, setAllowed] = useState(false);
+
+  useEffect(() => {
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    setAllowed(!conn?.saveData);
+  }, []);
 
   useEffect(() => {
     const v = ref.current;
@@ -37,7 +44,9 @@ export function HeroVideo({ src, poster }: { src: string; poster?: string }) {
       io.disconnect();
       document.removeEventListener("visibilitychange", sync);
     };
-  }, []);
+  }, [allowed]);
+
+  if (!allowed) return null;
 
   return (
     <video
