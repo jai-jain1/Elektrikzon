@@ -14,7 +14,8 @@ import { SampleTag } from "@/components/product/SampleTag";
 import { SpecTable } from "@/components/product/SpecTable";
 import { AddToQuoteForm } from "@/components/product/AddToQuoteForm";
 import { ShareButton } from "@/components/product/ShareButton";
-import { FinishDots } from "@/components/product/FinishDots";
+import { LightFacts } from "@/components/product/LightDots";
+import { LIGHT_COLOUR_KEY } from "@/lib/lighting";
 import { ProductCard } from "@/components/product/ProductCard";
 import { WhatsAppButton } from "@/components/whatsapp/WhatsAppButton";
 import { ArrowLeftIcon, InstagramIcon } from "@/components/ui/icons";
@@ -35,6 +36,13 @@ export function ProductDetail({ product, related }: { product: Product; related:
   const category = localized(lang, product.category.title, product.category.titleHi);
   const description = localized(lang, product.description, product.descriptionHi);
   const image = product.images[active] ?? product.images[0];
+  // Wattage and colours lead the table, then the specs typed in the Studio.
+  const specs = [
+    ...(product.wattage ? [{ label: t("product.wattage"), value: `${product.wattage} W` }] : []),
+    ...(product.lightColours.length ? [{ label: t("product.light"), value: product.lightColours.map((c) => t(LIGHT_COLOUR_KEY[c])).join(", ") }] : []),
+    ...(product.bodyColours.length ? [{ label: t("product.body"), value: product.bodyColours.join(", ") }] : []),
+    ...product.specs,
+  ];
 
   return (
     <div className="container-site pb-10 pt-24 sm:pt-32">
@@ -93,6 +101,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[-0.02em] sm:text-5xl">{name}</h1>
           {product.brand && <p className="mt-2 text-sm text-muted">{product.brand.name}</p>}
+          <LightFacts wattage={product.wattage} colours={product.lightColours} className="mt-4" />
           <PriceLine product={product} className="mt-5" large />
           {product.inStockNote && <p className="mt-2 text-sm text-muted">{product.inStockNote}</p>}
           {description && <p className="mt-6 max-w-prose leading-relaxed text-muted">{description}</p>}
@@ -118,23 +127,12 @@ export function ProductDetail({ product, related }: { product: Product; related:
           </div>
 
           <div className="mt-10 space-y-8">
-            {product.specs.length > 0 && (
+            {specs.length > 0 && (
               <section aria-labelledby="specs-title">
                 <h2 id="specs-title" className="eyebrow mb-3 font-sans">
                   {t("product.specs")}
                 </h2>
-                <SpecTable specs={product.specs} />
-              </section>
-            )}
-            {product.finishes.length > 0 && (
-              <section aria-labelledby="finishes-title">
-                <h2 id="finishes-title" className="eyebrow mb-3 font-sans">
-                  {t("product.finishes")}
-                </h2>
-                <div className="flex flex-wrap items-center gap-3 text-sm text-muted">
-                  <FinishDots finishes={product.finishes} />
-                  <span>{product.finishes.join(", ")}</span>
-                </div>
+                <SpecTable specs={specs} />
               </section>
             )}
             {product.use.length > 0 && (

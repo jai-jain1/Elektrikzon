@@ -176,13 +176,6 @@ export const siteSettings = defineType({
       validation: placeholderWarning,
     }),
     defineField({
-      name: "heroVideoUrl",
-      title: "Hero video link (optional)",
-      type: "url",
-      group: "homepage",
-      description: "An MP4 link for the homepage background. Leave empty to use the 3D switch wall.",
-    }),
-    defineField({
       name: "headlines",
       title: "Hero headline options",
       type: "array",

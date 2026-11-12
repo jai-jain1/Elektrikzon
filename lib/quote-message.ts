@@ -16,13 +16,10 @@ export function buildQuoteMessage(items: QuoteItem[], { name, area, source }: Me
   items.forEach((item, i) => {
     const n = `${i + 1}.`;
     if (item.kind === "product") {
-      const finish = item.finish ? `, ${item.finish}` : "";
+      const option = item.option ? `, ${item.option}` : "";
       const price = typeof item.unitPrice === "number" ? ` @ ${formatINR(item.unitPrice)}` : "";
-      lines.push(`${n} ${item.title}${finish} × ${item.qty}${price}`);
+      lines.push(`${n} ${item.title}${option} × ${item.qty}${price}`);
       if (item.productId) lines.push(`    ID: ${item.productId}`);
-    } else if (item.kind === "config") {
-      lines.push(`${n} ${item.title} × ${item.qty}`);
-      if (item.detail) lines.push(`    ${item.detail}`);
     } else {
       lines.push(`${n} ${item.title}`);
       if (item.detail) lines.push(`    ${item.detail}`);
@@ -54,8 +51,8 @@ export function buildOrderMessage(items: QuoteItem[], o: OrderOptions): string {
   const lines: string[] = ["Hello ElektrikZone, I’d like to place an order.", `Order: ${o.orderId}`, ""];
   items.forEach((item, i) => {
     const unit = item.unitPrice ?? 0;
-    const finish = item.finish ? `, ${item.finish}` : "";
-    lines.push(`${i + 1}. ${item.title}${finish} × ${item.qty} @ ${formatINR(unit)} = ${formatINR(unit * item.qty)}`);
+    const option = item.option ? `, ${item.option}` : "";
+    lines.push(`${i + 1}. ${item.title}${option} × ${item.qty} @ ${formatINR(unit)} = ${formatINR(unit * item.qty)}`);
     const meta = [item.productId && `ID: ${item.productId}`, item.offerCampaign && `${item.offerCampaign} price`].filter(Boolean);
     if (meta.length) lines.push(`    ${meta.join(" · ")}`);
   });
@@ -69,10 +66,10 @@ export function buildOrderMessage(items: QuoteItem[], o: OrderOptions): string {
 }
 
 /** One-product enquiry, used by “Ask about this on WhatsApp”. */
-export function buildProductMessage(title: string, productId: string, source: string, finish?: string): string {
+export function buildProductMessage(title: string, productId: string, source: string, option?: string): string {
   return [
     `Hello ElektrikZone, I’d like the trade price and availability for:`,
-    `${title}${finish ? `, ${finish}` : ""}`,
+    `${title}${option ? `, ${option}` : ""}`,
     `ID: ${productId}`,
     "",
     `Ref: EZ-${source.toUpperCase()}`,

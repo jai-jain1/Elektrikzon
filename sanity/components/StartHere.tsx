@@ -23,14 +23,15 @@ export function StartHere() {
           “[ADD: …]” on the site.
         </li>
         <li>
-          <strong>Categories</strong> and <strong>Subcategories</strong>: the sections of your catalogue.
+          <strong>Categories</strong>: the types of light you sell (Panel Lights, Strip Lights and so on). Delete any you
+          do not stock. <strong>Subcategories</strong> are optional.
         </li>
         <li>
           <strong>Brands</strong>: names only, no logos. Add only brands you stock.
         </li>
         <li>
-          <strong>Products by category</strong>: pick a category, then press the pencil icon to add a product to it.
-          Turn <em>Sample listing</em> OFF for real products.
+          <strong>Products by category</strong>: pick a type of light, then press the pencil icon to add a product to it.
+          Fill in the wattage, light colours and a selling price, and turn <em>Sample listing</em> OFF for real products.
         </li>
         <li>
           <strong>Reels</strong>: paste Instagram links to show them on the Reels Wall.

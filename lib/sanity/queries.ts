@@ -17,7 +17,6 @@ export const categoriesQuery = groq`*[_type == "category" && defined(slug.curren
   "slug": slug.current,
   description,
   descriptionHi,
-  displayStyle,
   coverImage ${IMAGE},
   order
 }`;
@@ -44,7 +43,9 @@ const PRODUCT = groq`{
   "category": category->{ title, titleHi, "slug": slug.current },
   "subcategory": subcategory->{ title, titleHi, "slug": slug.current },
   "brand": brand->{ name, "slug": slug.current },
-  finishes,
+  wattage,
+  lightColours,
+  bodyColours,
   use,
   specs[]{ label, value },
   description,
@@ -123,6 +124,5 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings" && _id == "siteS
   deliveryAreas,
   deliveryPromise,
   quoteResponseTime,
-  heroVideoUrl,
   headlines
 }`;

@@ -8,19 +8,19 @@ import { safeJSONStorage } from "@/lib/storage";
  * Quote basket. Lives only in the visitor’s browser (localStorage) and is
  * sent only as a WhatsApp message. Never sent to Sanity or any server.
  */
-export type QuoteKind = "product" | "config" | "lighting";
+export type QuoteKind = "product" | "lighting";
 
 export interface QuoteItem {
-  /** Unique per line: product id + finish, or a generated id. */
+  /** Unique per line: product id + chosen option, or a generated id. */
   key: string;
   kind: QuoteKind;
   productId?: string;
   title: string;
   titleHi?: string;
-  /** Extra line for configurator plates and lighting briefs. */
+  /** Extra line for lighting briefs. */
   detail?: string;
-  finish?: string;
-  finishOptions?: string[];
+  /** What the customer chose, e.g. "Warm white, Black". */
+  option?: string;
   qty: number;
   /** Price per unit for online orders (selling or offer price), when the product has one. */
   unitPrice?: number;
@@ -33,13 +33,12 @@ export type NewQuoteItem = Omit<QuoteItem, "key" | "qty"> & { qty?: number };
 export const MAX_QTY = 999;
 
 const lineKey = (i: NewQuoteItem) =>
-  i.kind === "product" && i.productId ? `p:${i.productId}:${i.finish ?? ""}` : `${i.kind}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  i.kind === "product" && i.productId ? `p:${i.productId}:${i.option ?? ""}` : `${i.kind}:${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
 interface QuoteState {
   items: QuoteItem[];
   add: (item: NewQuoteItem) => void;
   setQty: (key: string, qty: number) => void;
-  setFinish: (key: string, finish: string | undefined) => void;
   remove: (key: string) => void;
   clear: () => void;
 }
@@ -61,27 +60,24 @@ export const useQuote = create<QuoteState>()(
       },
       setQty: (key, qty) =>
         set({ items: get().items.map((i) => (i.key === key ? { ...i, qty: Math.max(1, Math.min(MAX_QTY, Math.round(qty) || 1)) } : i)) }),
-      setFinish: (key, finish) => {
-        const items = get().items;
-        const item = items.find((i) => i.key === key);
-        if (!item || item.kind !== "product") return;
-        const newKey = `p:${item.productId}:${finish ?? ""}`;
-        const clash = items.find((i) => i.key === newKey && i.key !== key);
-        if (clash) {
-          // Merge into the existing line with that finish.
-          set({
-            items: items
-              .filter((i) => i.key !== key)
-              .map((i) => (i.key === newKey ? { ...i, qty: Math.min(MAX_QTY, i.qty + item.qty) } : i)),
-          });
-        } else {
-          set({ items: items.map((i) => (i.key === key ? { ...i, finish, key: newKey } : i)) });
-        }
-      },
       remove: (key) => set({ items: get().items.filter((i) => i.key !== key) }),
       clear: () => set({ items: [] }),
     }),
-    { name: "ez-quote", storage: safeJSONStorage, skipHydration: true, version: 1 },
+    {
+      name: "ez-quote",
+      storage: safeJSONStorage,
+      skipHydration: true,
+      version: 2,
+      // v1 lists could hold switch-plate lines and a "finish"; keep what still applies.
+      migrate: (persisted) => {
+        const old = (persisted as { items?: (QuoteItem & { finish?: string; kind: string })[] } | null)?.items ?? [];
+        return {
+          items: old
+            .filter((i) => i.kind === "product" || i.kind === "lighting")
+            .map(({ finish, ...i }) => ({ ...i, option: i.option ?? finish })),
+        };
+      },
+    },
   ),
 );
 

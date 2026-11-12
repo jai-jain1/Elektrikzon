@@ -19,9 +19,9 @@ const deva = Noto_Sans_Devanagari({
   display: "swap",
 });
 
-const TITLE = "ElektrikZone · Electrical products, wholesale and retail, Ulhasnagar";
+const TITLE = "ElektrikZone · LED lighting, wholesale and retail, Ulhasnagar";
 const DESCRIPTION =
-  "ElektrikZone supplies switches, sockets, lighting, wires, MCBs, fans and smart home products, wholesale and retail, in Ulhasnagar, Maharashtra. Request a quote on WhatsApp.";
+  "ElektrikZone supplies LED panel lights, COB downlights, strip, rope and profile lights, wholesale and retail, in Ulhasnagar, Maharashtra. Order online or request a quote on WhatsApp.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

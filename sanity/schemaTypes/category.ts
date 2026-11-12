@@ -7,7 +7,7 @@ export const category = defineType({
   title: "Category",
   type: "document",
   icon: FolderIcon,
-  description: "A main section of the catalogue, e.g. Lighting.",
+  description: "A type of light, e.g. Panel Lights or Strip Lights.",
   fields: [
     defineField({
       name: "title",
@@ -44,24 +44,7 @@ export const category = defineType({
       type: "text",
       rows: 2,
     }),
-    defineField({
-      name: "displayStyle",
-      title: "How it looks on the homepage",
-      type: "string",
-      description:
-        "Editorial = large photo tile. Technical = compact row (good for wires, MCBs, conduits, accessories). Standard = normal tile.",
-      options: {
-        list: [
-          { title: "Editorial (large tile)", value: "editorial" },
-          { title: "Technical (compact row)", value: "technical" },
-          { title: "Standard", value: "standard" },
-        ],
-        layout: "radio",
-      },
-      initialValue: "standard",
-      validation: (rule) => rule.required().error("Please choose how this category should look."),
-    }),
-    imageWithAlt("coverImage", "Cover photo", "Shown on the category tile. Landscape, about 1600 px wide."),
+    imageWithAlt("coverImage", "Cover photo (optional)", "Shown on the category tile. Landscape, about 1600 px wide. The eight built-in types already have a rendered image; a photo here replaces it."),
     defineField({
       name: "order",
       title: "Sort order",
@@ -72,7 +55,7 @@ export const category = defineType({
   ],
   orderings: [{ title: "Sort order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] }],
   preview: {
-    select: { title: "title", style: "displayStyle", media: "coverImage" },
-    prepare: ({ title, style, media }) => ({ title, subtitle: style ? `Style: ${style}` : undefined, media }),
+    select: { title: "title", order: "order", media: "coverImage" },
+    prepare: ({ title, order, media }) => ({ title, subtitle: typeof order === "number" ? `Sort order ${order}` : undefined, media }),
   },
 });

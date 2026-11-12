@@ -17,15 +17,14 @@ export function useAddToQuote() {
   const t = useT();
 
   return useCallback(
-    (product: Product, opts: { finish?: string; qty?: number } = {}) => {
+    (product: Product, opts: { option?: string; qty?: number } = {}) => {
       const unitPrice = effectivePrice(product);
       add({
         kind: "product",
         productId: product.id,
         title: product.name,
         titleHi: product.nameHi,
-        finish: opts.finish,
-        finishOptions: product.finishes.length ? product.finishes : undefined,
+        option: opts.option,
         qty: opts.qty,
         unitPrice,
         offerCampaign: product.offer?.price ? product.offer.campaignTitle : undefined,

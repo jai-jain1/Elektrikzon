@@ -4,19 +4,24 @@ export interface FilterState {
   q: string;
   category: string;
   subcategory: string;
+  /** Light colour, e.g. "Warm white". */
+  cct: string;
+  /** Wattage as text, e.g. "12". */
+  watt: string;
+  /** Body colour, e.g. "Black". */
+  body: string;
   brand: string;
-  finish: string;
   use: string;
 }
 
-export const EMPTY_FILTERS: FilterState = { q: "", category: "", subcategory: "", brand: "", finish: "", use: "" };
+export const EMPTY_FILTERS: FilterState = { q: "", category: "", subcategory: "", cct: "", watt: "", body: "", brand: "", use: "" };
 
-export const FILTER_KEYS = ["category", "subcategory", "brand", "finish", "use"] as const;
+export const FILTER_KEYS = ["category", "subcategory", "cct", "watt", "body", "brand", "use"] as const;
 export type FacetKey = (typeof FILTER_KEYS)[number];
 
 const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
 
-/** Searchable text: names (EN + HI), brand, category, subcategory and spec values. */
+/** Searchable text: names (EN + HI), brand, type of light, wattage, colours and spec values. */
 function haystack(p: Product): string {
   return norm(
     [
@@ -28,8 +33,10 @@ function haystack(p: Product): string {
       p.subcategory?.title,
       p.subcategory?.titleHi,
       p.id,
+      p.wattage ? `${p.wattage}w ${p.wattage} w ${p.wattage} watt` : "",
       ...p.specs.map((s) => s.value),
-      ...p.finishes,
+      ...p.lightColours,
+      ...p.bodyColours,
     ]
       .filter(Boolean)
       .join(" "),
@@ -53,10 +60,14 @@ function matchesFacet(p: Product, key: FacetKey, value: string): boolean {
       return p.category.slug === value;
     case "subcategory":
       return p.subcategory?.slug === value;
+    case "cct":
+      return (p.lightColours as string[]).includes(value);
+    case "watt":
+      return String(p.wattage ?? "") === value;
+    case "body":
+      return (p.bodyColours as string[]).includes(value);
     case "brand":
       return p.brand?.slug === value || p.brand?.name === value;
-    case "finish":
-      return (p.finishes as string[]).includes(value);
     case "use":
       return (p.use as string[]).includes(value);
   }

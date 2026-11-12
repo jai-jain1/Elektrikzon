@@ -34,7 +34,7 @@ export function PasteList() {
   );
 
   const message = [
-    "Hello ElektrikZone, please quote this designer product list:",
+    "Hello ElektrikZone, please quote this lighting list:",
     project.trim() ? `Project: ${project.trim()}` : "",
     "",
     ...lines.map((l, i) => `${i + 1}. ${l}`),

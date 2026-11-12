@@ -34,7 +34,7 @@ export function ContractorsPage() {
         ]}
       />
       <div className="container-site mt-8">
-        <Link href="/products?category=technical-supply" className="inline-flex min-h-[44px] items-center gap-2 text-sm text-fg hover:text-amber">
+        <Link href="/products?category=drivers-and-accessories" className="inline-flex min-h-[44px] items-center gap-2 text-sm text-fg hover:text-amber">
           {t("con.browse")}
           <ArrowRightIcon size={16} />
         </Link>

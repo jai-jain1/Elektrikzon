@@ -1,16 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { SHOTS } from "@/data/shots";
 import type { TKey } from "@/data/translations";
 import { fmt, useT } from "@/lib/i18n";
 import { kelvinToRgb, toneFor, TONE_EN } from "@/lib/kelvin";
+import { useIsLite } from "@/lib/prefs";
 import { useQuote } from "@/lib/quote";
+import { allLayers, LAYERS, type LayerKey, type LayerState } from "@/lib/three/layers";
 import { useUI } from "@/lib/ui";
 import { copyText } from "@/lib/clipboard";
-import { RoomScene } from "@/components/lightlab/RoomScene";
+import { ShotImage } from "@/components/media/ShotImage";
 import { CopyIcon } from "@/components/ui/icons";
 
-export type RoomKey = "living" | "bedroom" | "kitchen" | "bathroom" | "office";
+// three.js and the scene load only in the browser.
+const ShowroomCanvas = dynamic(() => import("@/components/three/ShowroomCanvas"), { ssr: false });
+
+type RoomKey = "living" | "bedroom" | "kitchen" | "bathroom" | "office";
 
 const ROOMS: { key: RoomKey; en: string }[] = [
   { key: "living", en: "Living room" },
@@ -27,33 +34,59 @@ const PRESETS: { key: string; kelvin: number; brightness: number; room?: RoomKey
   { key: "office", kelvin: 5000, brightness: 90, room: "office" },
 ];
 
-/** Product types worth discussing for a room (suggestions, not product claims). */
-const IDEAS: Record<RoomKey, string[]> = {
-  living: ["cove strip light", "downlights", "pendant"],
-  bedroom: ["cove strip light", "downlights", "bedside switch"],
-  kitchen: ["panel or downlights", "under-cabinet strip"],
-  bathroom: ["downlights", "mirror light"],
-  office: ["panel lights", "desk-area downlights"],
+/** Names used in the brief, which is always in English for the shop. */
+const LAYER_EN: Record<LayerKey, string> = {
+  panel: "panel lights",
+  cob: "COB downlights",
+  strip: "strip lights",
+  profile: "profile lights",
+  rope: "rope lights",
 };
 
 const MIN_K = 2700;
 const MAX_K = 6500;
 
+const pill =
+  "inline-flex min-h-[40px] items-center rounded-full border px-4 text-sm text-muted transition-colors hairline peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-fg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-amber";
+
+/**
+ * Light Lab: the 3D room with every control exposed. Switch each type of
+ * light, slide from warm to cool, dim it, then send the result as a brief.
+ * Lite mode and browsers without WebGL get the rendered still, tinted and
+ * dimmed with CSS (without the per-light switches).
+ */
 export function LightLab() {
   const t = useT();
+  const lite = useIsLite();
   const add = useQuote((s) => s.add);
   const showToast = useUI((u) => u.showToast);
   const [room, setRoom] = useState<RoomKey>("living");
   const [kelvin, setKelvin] = useState(3000);
-  const [brightness, setBrightness] = useState(70);
+  const [brightness, setBrightness] = useState(80);
+  const [layers, setLayers] = useState<LayerState>(() => allLayers(true));
+  const [mounted, setMounted] = useState(false);
+  const [live, setLive] = useState(false);
+  const [failed, setFailed] = useState(false);
 
+  useEffect(() => setMounted(true), []);
+  const onReady = useCallback(() => setLive(true), []);
+  const onFail = useCallback(() => setFailed(true), []);
+
+  const still = lite || failed;
+  const state = useMemo(() => ({ layers, kelvin, brightness: brightness / 100 }), [layers, kelvin, brightness]);
   const rgb = useMemo(() => kelvinToRgb(kelvin), [kelvin]);
   const tone = toneFor(kelvin);
   const roomEn = ROOMS.find((r) => r.key === room)!.en;
   const roomLabel = t(`room.${room}` as TKey);
 
-  const ideas = [...IDEAS[room], ...(brightness < 80 ? ["dimmer"] : [])];
-  const detail = `${kelvin} K (${TONE_EN[tone]}), ${brightness}% brightness. Ideas to discuss: ${ideas.join(", ")}.`;
+  const chosen = LAYERS.filter((k) => layers[k]).map((k) => LAYER_EN[k]);
+  const detail = [
+    `${kelvin} K (${TONE_EN[tone]}), ${brightness}% brightness.`,
+    !still && chosen.length ? `Lights: ${chosen.join(", ")}.` : "",
+    brightness < 80 ? "Would like it dimmable." : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
   const brief = `Lighting brief: ${roomEn}\n${detail}`;
 
   const onCopy = async () => {
@@ -69,6 +102,8 @@ export function LightLab() {
 
   const tempTrack = `linear-gradient(90deg, rgb(${kelvinToRgb(MIN_K).join(",")}), rgb(${kelvinToRgb(4000).join(",")}), rgb(${kelvinToRgb(MAX_K).join(",")}))`;
   const brightTrack = "linear-gradient(90deg, #111, rgb(var(--fg)))";
+  // The still was rendered at 3000 K: shift it towards the chosen colour and dim it.
+  const shift = Math.min(1, Math.max(0, (kelvin - 3000) / 3500));
 
   return (
     <section id="light-lab" aria-labelledby="light-title" className="scroll-mt-24 py-20 lg:py-28">
@@ -81,60 +116,47 @@ export function LightLab() {
           <p className="mt-5 text-muted">{t("light.sub")}</p>
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
-          <figure>
-            <div
-              className="relative aspect-[16/10] overflow-hidden rounded-3xl border hairline"
-              style={{ boxShadow: `0 40px 120px -50px rgb(${rgb.join(",")} / ${0.2 + (brightness / 100) * 0.5})`, transition: "box-shadow 450ms" }}
-            >
-              <RoomScene room={room} rgb={rgb} brightness={brightness} />
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
+          <figure className="lg:sticky lg:top-24 lg:self-start">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-black sm:aspect-[16/10]">
+              <ShotImage shot={SHOTS.showroomOn} sizes="(min-width: 1024px) 60vw, 100vw" priority />
+              {still && (
+                <>
+                  <div aria-hidden="true" className="absolute inset-0 transition-opacity duration-500" style={{ background: `rgb(${rgb.join(",")})`, mixBlendMode: "color", opacity: shift * 0.6 }} />
+                  <div aria-hidden="true" className="absolute inset-0 bg-black transition-opacity duration-500" style={{ opacity: (1 - brightness / 100) * 0.8 }} />
+                </>
+              )}
+              {mounted && !still && (
+                <div className={`absolute inset-0 transition-opacity duration-700 ease-film ${live ? "opacity-100" : "opacity-0"}`}>
+                  <ShowroomCanvas state={state} parallax onReady={onReady} onFail={onFail} />
+                </div>
+              )}
             </div>
             <figcaption className="mt-3 flex flex-wrap justify-between gap-2 text-xs text-muted">
               <span aria-live="polite" className="sr-only">
-                {fmt(t("light.alt"), { room: roomLabel, k: String(kelvin), b: String(brightness) })}
+                {fmt(t("light.alt"), { k: String(kelvin), b: String(brightness) })}
               </span>
               <span aria-hidden="true">
-                {roomLabel} · {kelvin} K · {t(tone)} · {brightness}%
+                {kelvin} K · {t(tone)} · {brightness}%
               </span>
               <span>{t("light.note")}</span>
             </figcaption>
           </figure>
 
           <div className="space-y-7">
-            <fieldset>
-              <legend className="eyebrow mb-3 font-sans">{t("light.room")}</legend>
-              <div className="flex flex-wrap gap-2">
-                {ROOMS.map((r) => (
-                  <label key={r.key} className="cursor-pointer">
-                    <input type="radio" name="ll-room" checked={room === r.key} onChange={() => setRoom(r.key)} className="peer sr-only" />
-                    <span className="inline-flex min-h-[40px] items-center rounded-full border px-4 text-sm text-muted transition-colors hairline peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-fg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-amber">
-                      {t(`room.${r.key}` as TKey)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend className="eyebrow mb-3 font-sans">{t("light.presets")}</legend>
-              <div className="flex flex-wrap gap-2">
-                {PRESETS.map((p) => (
-                  <button
-                    key={p.key}
-                    type="button"
-                    onClick={() => {
-                      setKelvin(p.kelvin);
-                      setBrightness(p.brightness);
-                      if (p.room) setRoom(p.room);
-                    }}
-                    className="inline-flex min-h-[40px] items-center gap-2 rounded-full border px-4 text-sm text-muted transition-colors hairline hover:text-fg"
-                  >
-                    <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: `rgb(${kelvinToRgb(p.kelvin).join(",")})` }} />
-                    {t(`light.preset.${p.key}` as TKey)}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
+            {!still && (
+              <fieldset>
+                <legend className="eyebrow mb-3 font-sans">{t("light.lights")}</legend>
+                <div className="flex flex-wrap gap-2">
+                  {LAYERS.map((key) => (
+                    <label key={key} className="cursor-pointer">
+                      <input type="checkbox" checked={layers[key]} onChange={() => setLayers((prev) => ({ ...prev, [key]: !prev[key] }))} className="peer sr-only" />
+                      <span className={pill}>{t(`layer.${key}.long` as TKey)}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
 
             <div>
               <label htmlFor="ll-temp" className="flex items-baseline justify-between text-sm">
@@ -175,6 +197,39 @@ export function LightLab() {
                 style={{ ["--track" as string]: brightTrack }}
               />
             </div>
+
+            <fieldset>
+              <legend className="eyebrow mb-3 font-sans">{t("light.presets")}</legend>
+              <div className="flex flex-wrap gap-2">
+                {PRESETS.map((p) => (
+                  <button
+                    key={p.key}
+                    type="button"
+                    onClick={() => {
+                      setKelvin(p.kelvin);
+                      setBrightness(p.brightness);
+                      if (p.room) setRoom(p.room);
+                    }}
+                    className="inline-flex min-h-[40px] items-center gap-2 rounded-full border px-4 text-sm text-muted transition-colors hairline hover:text-fg"
+                  >
+                    <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: `rgb(${kelvinToRgb(p.kelvin).join(",")})` }} />
+                    {t(`light.preset.${p.key}` as TKey)}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend className="eyebrow mb-3 font-sans">{t("light.room")}</legend>
+              <div className="flex flex-wrap gap-2">
+                {ROOMS.map((r) => (
+                  <label key={r.key} className="cursor-pointer">
+                    <input type="radio" name="ll-room" checked={room === r.key} onChange={() => setRoom(r.key)} className="peer sr-only" />
+                    <span className={pill}>{t(`room.${r.key}` as TKey)}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
 
             <div className="rounded-2xl border bg-surface/60 p-5 hairline">
               <p className="eyebrow font-sans">{t("light.briefTitle")}</p>

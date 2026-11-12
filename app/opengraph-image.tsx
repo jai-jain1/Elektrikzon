@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "ElektrikZone · Electrical products, wholesale and retail, Ulhasnagar";
+export const alt = "ElektrikZone · LED lighting, wholesale and retail, Ulhasnagar";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 // Edge runtime: the Node build of @vercel/og fails on Windows paths with spaces.
@@ -43,10 +43,10 @@ export default function OpengraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div style={{ fontSize: 72, lineHeight: 1.05, letterSpacing: -2, maxWidth: 980 }}>
-            Light, power and control, chosen with care.
+            The right light for every room.
           </div>
           <div style={{ fontSize: 28, color: "#86868B" }}>
-            Electrical products · Wholesale and retail · Ulhasnagar, Maharashtra
+            LED lighting · Wholesale and retail · Ulhasnagar, Maharashtra
           </div>
         </div>
       </div>

@@ -40,3 +40,10 @@ export const TONE_EN: Record<ToneKey, string> = {
   "light.cool": "cool white",
   "light.daylight": "daylight",
 };
+
+/** The three whites LED lights are usually sold in, with a swatch colour for the UI. */
+export const TONES = [
+  { key: "warm", kelvin: 3000, dot: "#ffd29e" },
+  { key: "neutral", kelvin: 4000, dot: "#fff3e2" },
+  { key: "cool", kelvin: 6500, dot: "#cfe2ff" },
+] as const;

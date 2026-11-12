@@ -8,7 +8,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Catalogue",
   description:
-    "Switches, sockets, lighting, wires, MCBs, fans and smart home products from ElektrikZone, Ulhasnagar. Search, filter and request a trade price on WhatsApp.",
+    "LED panel lights, COB downlights, strip, rope and profile lights from ElektrikZone, Ulhasnagar. Filter by light colour and wattage, order online or request a trade price on WhatsApp.",
   alternates: { canonical: "/products" },
   openGraph: { title: "Catalogue · ElektrikZone", url: "/products" },
 };

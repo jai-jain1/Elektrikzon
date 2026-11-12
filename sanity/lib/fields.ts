@@ -26,7 +26,7 @@ export function altField() {
     name: "alt",
     title: "Alt text (describe the photo)",
     type: "string",
-    description: "Used by screen readers and Google. Name it after the product, e.g. “Charcoal 2-module switch plate”.",
+    description: "Used by screen readers and Google. Name it after the product, e.g. “Round 12 W panel light, white trim”.",
     validation: (rule) => rule.required().error("Please describe the photo in a few words."),
   });
 }

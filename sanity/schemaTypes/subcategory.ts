@@ -6,7 +6,7 @@ export const subcategory = defineType({
   title: "Subcategory",
   type: "document",
   icon: SubfolderIcon,
-  description: "A smaller group inside a category, e.g. Downlights inside Lighting.",
+  description: "An optional smaller group inside a type of light, e.g. Surface Panels inside Panel Lights.",
   fields: [
     defineField({
       name: "title",

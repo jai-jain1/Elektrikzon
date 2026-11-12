@@ -27,10 +27,6 @@ export function DesignersPage() {
             <span className="font-display text-xl">{t("des.lightlab")}</span>
             <ArrowRightIcon size={18} className="text-electric transition-transform group-hover:translate-x-1" />
           </Link>
-          <Link href="/configurator" className="group flex min-h-[64px] items-center justify-between rounded-2xl border px-5 hairline hover:border-accent/40">
-            <span className="font-display text-xl">{t("des.configurator")}</span>
-            <ArrowRightIcon size={18} className="text-electric transition-transform group-hover:translate-x-1" />
-          </Link>
           <Link href="/products" className="group flex min-h-[64px] items-center justify-between rounded-2xl border px-5 hairline hover:border-accent/40">
             <span className="font-display text-xl">{t("hero.ctaBrowse")}</span>
             <ArrowRightIcon size={18} className="text-electric transition-transform group-hover:translate-x-1" />

@@ -6,9 +6,12 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || "produc
 /** Fixed API date so query behaviour never changes underneath the site. */
 export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.trim() || "2024-10-01";
 
+/** `npm run dev:sample` sets this to preview the built-in sample catalogue without reading Sanity. */
+const sampleDataOnly = process.env.EZ_SAMPLE_DATA === "1";
+
 /**
  * True only for a real-looking project ID (lowercase letters, digits, dashes).
  * Placeholders such as "YOUR_PROJECT_ID" fail this check, so the site uses
  * its fallback catalogue instead of crashing.
  */
-export const isSanityConfigured = /^[a-z0-9][a-z0-9-]*$/.test(projectId);
+export const isSanityConfigured = !sampleDataOnly && /^[a-z0-9][a-z0-9-]*$/.test(projectId);

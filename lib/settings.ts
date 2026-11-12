@@ -46,7 +46,6 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     deliveryAreas: pickList(s.deliveryAreas, CONFIG.deliveryAreas),
     deliveryPromise: pickString(s.deliveryPromise, CONFIG.deliveryPromise),
     quoteResponseTime: pickString(s.quoteResponseTime, CONFIG.quoteResponseTime),
-    heroVideo: real(s.heroVideoUrl) ? s.heroVideoUrl.trim() : CONFIG.heroVideo,
     headlines: [
       headlines[0] ?? CONFIG.headlines[0],
       headlines[1] ?? CONFIG.headlines[1],

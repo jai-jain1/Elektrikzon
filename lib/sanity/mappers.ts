@@ -1,4 +1,17 @@
-import { FINISHES, USES, type Brand, type Campaign, type Category, type Finish, type Product, type Reel, type Subcategory, type Use } from "@/types/catalog";
+import {
+  BODY_COLOURS,
+  LIGHT_COLOURS,
+  USES,
+  type BodyColour,
+  type Brand,
+  type Campaign,
+  type Category,
+  type LightColour,
+  type Product,
+  type Reel,
+  type Subcategory,
+  type Use,
+} from "@/types/catalog";
 import type { SanityBrand, SanityCampaign, SanityCategory, SanityProduct, SanityReel, SanitySubcategory } from "./types";
 import { toSiteImage } from "./image";
 
@@ -16,7 +29,6 @@ export function mapCategory(c: SanityCategory): Category | null {
     titleHi: c.titleHi || undefined,
     description: c.description || undefined,
     descriptionHi: c.descriptionHi || undefined,
-    displayStyle: c.displayStyle ?? "standard",
     coverImage: toSiteImage(c.coverImage, c.title) ?? undefined,
     order: c.order ?? 100,
   };
@@ -47,7 +59,9 @@ export function mapProduct(p: SanityProduct): Product | null {
         ? { slug: p.subcategory.slug, title: p.subcategory.title, titleHi: p.subcategory.titleHi || undefined }
         : undefined,
     brand: p.brand && nonEmpty(p.brand.name) ? { name: p.brand.name, slug: p.brand.slug || "" } : undefined,
-    finishes: (p.finishes ?? []).filter((f): f is Finish => (FINISHES as readonly string[]).includes(f)),
+    wattage: typeof p.wattage === "number" && p.wattage > 0 ? p.wattage : undefined,
+    lightColours: (p.lightColours ?? []).filter((c): c is LightColour => (LIGHT_COLOURS as readonly string[]).includes(c)),
+    bodyColours: (p.bodyColours ?? []).filter((c): c is BodyColour => (BODY_COLOURS as readonly string[]).includes(c)),
     use: (p.use ?? []).filter((u): u is Use => (USES as readonly string[]).includes(u)),
     specs: (p.specs ?? [])
       .filter((s) => nonEmpty(s.label) && nonEmpty(s.value))

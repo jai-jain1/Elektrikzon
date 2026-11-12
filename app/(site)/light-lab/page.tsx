@@ -3,7 +3,7 @@ import { LightLab } from "@/components/lightlab/LightLab";
 
 export const metadata: Metadata = {
   title: "Light Lab",
-  description: "Try light colour and brightness in a room before you buy, then send the lighting brief to ElektrikZone on WhatsApp.",
+  description: "A 3D room to try before you buy: switch panel, COB, strip, profile and rope lights, go from warm to cool and dim them, then send the brief to ElektrikZone on WhatsApp.",
   alternates: { canonical: "/light-lab" },
   openGraph: { title: "Light Lab · ElektrikZone", url: "/light-lab" },
 };

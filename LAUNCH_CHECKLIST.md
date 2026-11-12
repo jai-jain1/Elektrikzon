@@ -1,6 +1,6 @@
 # ElektrikZone launch checklist
 
-Replace `elektrikzone.in` below with your real domain (or the `.vercel.app` address).
+Replace `elektrikzone.in` below with your real domain (or your `.netlify.app` address).
 
 ---
 
@@ -31,7 +31,7 @@ Replace `elektrikzone.in` below with your real domain (or the `.vercel.app` addr
 ### In the Studio → Products
 | Placeholder | Where |
 | --- | --- |
-| `[ADD: confirm]` spec values | The 12 sample products: replace with real specs or delete the rows |
+| `[ADD: confirm]` spec values | The 8 sample products: replace with real specs or delete the rows |
 | “Sample listing” tags | Switch **Sample listing** OFF on each real product |
 | “Photo coming soon” | Upload photos |
 
@@ -40,35 +40,32 @@ Replace `elektrikzone.in` below with your real domain (or the `.vercel.app` addr
 | --- | --- |
 | `YOUR_PROJECT_ID` | `.env.local` → `NEXT_PUBLIC_SANITY_PROJECT_ID` (**still not set in this folder**) |
 | `http://localhost:3000` | `.env.local` / Vercel → `NEXT_PUBLIC_SITE_URL` (QR code, sitemap, Google data use it) |
-| `[ADD: confirm per brand]` (configurator and hero finishes) | `data/configurator.ts` (`CONFIGURATOR_AVAILABILITY`) and `data/translations.ts` (`cfg.availability`, `hero.finishNote`) |
-| `[ADD: Years in business]` | `components/home/WhyElektrikZone.tsx`, `components/about/AboutPage.tsx` |
+| `[ADD: Years in business]` | `components/about/AboutPage.tsx` |
 | `[ADD: Shop story…]` | `components/about/AboutPage.tsx` |
-| `[ADD: Higgsfield shot · …]` (18 image slots) | `public/shots/` + `src` in `data/shots.ts` (see HIGGSFIELD_SHOTS.md) |
-| Hero video (optional) | Site settings → Homepage → Hero video link, or `public/video/hero-marble-apartment.mp4` |
 
 ---
 
 ## (b) First 15 product photos to shoot (priority order)
 
-Shoot on a plain light-grey or white background, daylight, about 1200 px wide, under 500 KB, WebP or JPG. One straight-on shot plus one close-up of the finish each.
+Shoot on a plain light-grey or white background, daylight, about 1200 px wide, under 500 KB, WebP or JPG. For each: one straight-on shot switched off, and one switched on in a dim room.
 
-1. Your best-selling **modular switch plate** (6-module), fully assembled, main finish
-2. The same plate in your **second most popular finish** (shows the finish range)
-3. **1-way modular switch** module, close-up
-4. **Modular socket** (2-module), front view
-5. **Dimmer / fan regulator** module
-6. **Cove / LED strip light** on its reel, plus a lit shot on a wall edge
-7. **Aluminium profile light** with diffuser, cut end visible
-8. **LED downlight**, front and side (cut-out depth)
-9. **LED panel light**
-10. **House wire coils**, the 3–4 colours you stock, stacked
-11. **MCB**, single, plus a row of 4 in a distribution board
-12. **Distribution board** (empty and fitted)
-13. **Ceiling fan**, main finish, hanging or on a stand
-14. **Smart touch switch**, lit indicator
-15. **The shop counter / shelves** (for the About and Contact pages, and the Collections cover)
+1. Your best-selling **slim round panel light**
+2. The **square panel** in the same range
+3. A **surface panel** (side view shows the thickness)
+4. Your best-selling **COB downlight**, front and side (cut-out depth)
+5. A **deep / anti-glare COB spot**
+6. **LED strip light** on its reel, plus a lit shot in a cove or under a shelf
+7. **COB strip** (the dot-free kind), lit close-up
+8. **Rope light** coil, plus a lit shot on a balcony or facade
+9. **Aluminium profile light** with diffuser, cut end visible
+10. A **profile light installed** in a ceiling or wardrobe
+11. **Track light** head on its rail
+12. **Flood light**, front and back
+13. **LED driver / power supply**, with the rating label readable
+14. **Connectors and controllers** laid out together
+15. **The shop counter / display wall** (for the About and Contact pages)
 
-Category cover photos (landscape, 1600 px): use 1, 6, 10, 13 and 14.
+Category cover photos are optional: each of the eight types already has a rendered picture.
 
 ---
 
@@ -76,29 +73,28 @@ Category cover photos (landscape, 1600 px): use 1, 6, 10, 13 and 14.
 
 ### Phone (Android Chrome and iPhone Safari, ~360–430 px)
 - [ ] Homepage loads quickly; no sideways scrolling anywhere
-- [ ] Hero: headline fades and the photo grows to full width as you scroll; the lights-on story crossfades dark → lit with three lines of copy
+- [ ] Hero: the 3D room starts dark and the lights come on one after another; the five switches and Warm / Neutral / Cool change the room
 - [ ] Menu button opens the full-screen menu; Escape/close works; Lite mode switch is there
 - [ ] EN / हिं switch changes all interface text; reload keeps the language
-- [ ] Catalogue: search, Filters button, Add to quote, quick view (eye icon)
+- [ ] Catalogue: search, the type-of-light row, Filters button (light colour, wattage, body colour), Add to quote / Add to bag
 - [ ] Product page: Share opens the phone share sheet; Copy Instagram caption works
-- [ ] Quote list: change quantities, finish, remove; **Send list on WhatsApp** opens WhatsApp with the numbered list and `Ref: EZ-WEB`
+- [ ] Quote list: change quantities, remove; the chosen light colour shows on the line; **Send list on WhatsApp** opens WhatsApp with the numbered list and `Ref: EZ-WEB`
 - [ ] Open `…/#ig-reel3`, add a product, send: the message ends `Ref: EZ-IG-REEL3`
 - [ ] Open `…/#ig-bio`: quick-links screen appears; “Continue to the full website” closes it
-- [ ] Configurator and Light Lab: add a plate and a lighting brief to the quote
-- [ ] Scroll film pins and steps through Plan → Wire → Protect → Finish
+- [ ] Light Lab: switch lights, move both sliders, add the lighting brief to the list
 - [ ] Contractors form opens WhatsApp with your details
 - [ ] Bottom “Request trade price” bar appears after scrolling and hides over the footer
-- [ ] Turn on the phone’s “Reduce motion”: Lite mode switches on by itself
+- [ ] Turn on the phone’s “Reduce motion”: Lite mode switches on by itself and the hero shows the still image
 
 ### Tablet (~768–1024 px, portrait and landscape)
 - [ ] Catalogue shows 3 columns; filters panel opens and closes
-- [ ] Configurator preview and controls sit side by side in landscape
+- [ ] Light Lab room and controls sit side by side in landscape
 - [ ] Quick view and quote drawer fit the screen and scroll inside
 
 ### Desktop (Chrome, Edge, Firefox; 1280 px and wider)
-- [ ] Finish showcase: swatches crossfade the large image
+- [ ] Hero: the room shifts slightly as the mouse moves; range tiles tilt under the mouse
 - [ ] Product cards lift slightly and the photo zooms gently on hover
-- [ ] Keyboard only: Tab through the header, open the menu, toggle the hero switch (Enter), use filters, open and close the quote drawer (Escape); focus ring always visible
+- [ ] Keyboard only: Tab through the header, open the menu, toggle the hero light switches (Enter or Space), use filters, open and close the quote drawer (Escape); focus ring always visible
 - [ ] After 60 seconds with an empty list, the “Need a price?” nudge appears once
 - [ ] Light theme (sun icon) is readable everywhere
 - [ ] `/studio` loads, you can log in, publish a change, and see it on the site

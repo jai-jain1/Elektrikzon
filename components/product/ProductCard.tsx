@@ -9,7 +9,7 @@ import { useAddToQuote } from "@/lib/useAddToQuote";
 import { ProductImage } from "@/components/product/ProductImage";
 import { PriceLine } from "@/components/product/PriceLine";
 import { SampleTag } from "@/components/product/SampleTag";
-import { FinishDots } from "@/components/product/FinishDots";
+import { LightFacts } from "@/components/product/LightDots";
 import { EyeIcon, PlusIcon } from "@/components/ui/icons";
 
 interface Props {
@@ -56,9 +56,7 @@ export function ProductCard({ product, onQuickView, priority }: Props) {
           </Link>
         </h3>
         {product.brand && <p className="mt-0.5 text-xs text-muted">{product.brand.name}</p>}
-        <div className="mt-3 flex min-h-[14px] items-center">
-          <FinishDots finishes={product.finishes} />
-        </div>
+        <LightFacts wattage={product.wattage} colours={product.lightColours} className="mt-3 min-h-[14px]" />
         <PriceLine product={product} className="mt-3" />
 
         <div className="mt-auto flex items-center gap-2 pt-4">

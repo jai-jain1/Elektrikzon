@@ -26,8 +26,9 @@ const config: Config = {
         "on-accent": token("on-accent"),
       },
       fontFamily: {
-        display: ["var(--font-sans)", "var(--font-deva)", "system-ui", "sans-serif"],
-        sans: ["var(--font-sans)", "var(--font-deva)", "system-ui", "sans-serif"],
+        // Fallbacks inside var(): if a web font fails to load, the rest of the stack still applies.
+        display: ["var(--font-sans, system-ui)", "var(--font-deva, system-ui)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans, system-ui)", "var(--font-deva, system-ui)", "system-ui", "sans-serif"],
       },
       maxWidth: {
         site: "84rem",

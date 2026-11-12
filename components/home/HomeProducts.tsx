@@ -8,7 +8,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { QuickView } from "@/components/product/QuickView";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
-/** Homepage product grid: two columns on phones so shoppers see more at once. */
+/** Homepage product grid: two columns on phones (six products there, eight on wider screens). */
 export function HomeProducts({ products }: { products: Product[] }) {
   const t = useT();
   const [quick, setQuick] = useState<Product | null>(null);
@@ -26,7 +26,7 @@ export function HomeProducts({ products }: { products: Product[] }) {
           <ArrowRightIcon size={16} />
         </Link>
       </div>
-      <ul className="container-site mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <ul className="container-site mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 max-sm:[&>li:nth-child(n+7)]:hidden">
         {products.map((p) => (
           <li key={p.id}>
             <ProductCard product={p} onQuickView={setQuick} />

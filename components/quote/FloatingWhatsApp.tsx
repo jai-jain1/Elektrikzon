@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuoteCount } from "@/lib/quote";
 import { useUI } from "@/lib/ui";
@@ -19,6 +20,8 @@ const NUDGE_KEY = "ez-nudge-dismissed";
  * Floating button bottom-right. With items in the quote list it opens the
  * list; otherwise it opens WhatsApp directly. Desktop visitors get one
  * gentle nudge after 60 seconds (once per session, never on touch).
+ * It stays out of the way while the homepage hero is on screen: the hero
+ * has its own WhatsApp button and the light switches sit in that corner.
  */
 export function FloatingWhatsApp() {
   const t = useT();
@@ -30,6 +33,20 @@ export function FloatingWhatsApp() {
   const setQuoteOpen = useUI((u) => u.setQuoteOpen);
   const [nudge, setNudge] = useState(false);
   const [source, setSource] = useState("web");
+  const [overHero, setOverHero] = useState(false);
+  const pathname = usePathname();
+  const hidden = barVisible || overHero;
+
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero || typeof IntersectionObserver === "undefined") {
+      setOverHero(false);
+      return;
+    }
+    const io = new IntersectionObserver(([entry]) => setOverHero(entry.intersectionRatio > 0.3), { threshold: [0, 0.3, 0.6] });
+    io.observe(hero);
+    return () => io.disconnect();
+  }, [pathname]);
 
   useEffect(() => setSource(getSourceToken()), []);
 
@@ -62,11 +79,11 @@ export function FloatingWhatsApp() {
     "relative flex h-14 w-14 items-center justify-center rounded-full bg-accent text-on-accent shadow-[0_12px_32px_-12px_rgb(0_0_0/0.8)] transition-[background-color,transform] duration-300 hover:scale-105 hover:bg-amber";
 
   return (
-    // Hidden while the request-quote bar is up: the bar offers the same actions.
+    // Hidden while the request-quote bar is up (it offers the same actions) and over the hero.
     <div
-      aria-hidden={barVisible || undefined}
+      aria-hidden={hidden || undefined}
       className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-[45] flex flex-col items-end gap-3 transition-[opacity,transform] duration-500 ease-film sm:bottom-6 sm:right-6 ${
-        barVisible ? "pointer-events-none translate-y-4 opacity-0 [visibility:hidden]" : "opacity-100"
+        hidden ? "pointer-events-none translate-y-4 opacity-0 [visibility:hidden]" : "opacity-100"
       }`}
     >
       <AnimatePresence>

@@ -31,7 +31,7 @@ export function QuoteDrawer() {
   const open = useUI((u) => u.quoteOpen);
   const setOpen = useUI((u) => u.setQuoteOpen);
   const showToast = useUI((u) => u.showToast);
-  const { items, setQty, setFinish, remove, clear } = useQuote();
+  const { items, setQty, remove, clear } = useQuote();
   const [name, setName] = useState("");
   const [area, setArea] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -128,6 +128,7 @@ export function QuoteDrawer() {
                           <span className="mt-0.5 text-xs tabular-nums text-electric">{String(i + 1).padStart(2, "0")}</span>
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-fg">{title}</p>
+                            {item.option && <p className="mt-0.5 text-xs text-muted">{item.option}</p>}
                             {item.productId && <p className="mt-0.5 text-[0.7rem] text-muted">ID: {item.productId}</p>}
                             {item.detail && <p className="mt-1 text-xs leading-relaxed text-muted">{item.detail}</p>}
                             {typeof item.unitPrice === "number" && (
@@ -179,23 +180,6 @@ export function QuoteDrawer() {
                                 <PlusIcon size={15} />
                               </button>
                             </div>
-                          )}
-                          {item.kind === "product" && item.finishOptions && item.finishOptions.length > 0 && (
-                            <label className="flex items-center gap-2 text-xs text-muted">
-                              {t("quote.finish")}
-                              <select
-                                value={item.finish ?? ""}
-                                onChange={(e) => setFinish(item.key, e.target.value || undefined)}
-                                className="min-h-[36px] rounded-full border bg-bg px-3 text-xs text-fg hairline"
-                              >
-                                <option value="">{t("quote.finishAny")}</option>
-                                {item.finishOptions.map((f) => (
-                                  <option key={f} value={f}>
-                                    {f}
-                                  </option>
-                                ))}
-                              </select>
-                            </label>
                           )}
                         </div>
                       </li>

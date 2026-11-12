@@ -3,18 +3,13 @@
 
 export type Lang = "en" | "hi";
 
-export type DisplayStyle = "editorial" | "technical" | "standard";
+/** The colour of the light itself. “3-in-1” fittings switch between the three whites. */
+export const LIGHT_COLOURS = ["Warm white", "Neutral white", "Cool white", "3-in-1", "RGB"] as const;
+export type LightColour = (typeof LIGHT_COLOURS)[number];
 
-export const FINISHES = [
-  "Matte White",
-  "Charcoal",
-  "Champagne Gold",
-  "Walnut",
-  "Black",
-  "Silver",
-  "Other",
-] as const;
-export type Finish = (typeof FINISHES)[number];
+/** The colour of the fitting’s body or trim. */
+export const BODY_COLOURS = ["White", "Black", "Grey", "Silver", "Gold", "Other"] as const;
+export type BodyColour = (typeof BODY_COLOURS)[number];
 
 export const USES = [
   "Living room",
@@ -47,7 +42,6 @@ export interface Category extends CategoryRef {
   id: string;
   description?: string;
   descriptionHi?: string;
-  displayStyle: DisplayStyle;
   coverImage?: SiteImage;
   order: number;
 }
@@ -81,7 +75,10 @@ export interface Product {
   category: CategoryRef;
   subcategory?: { slug: string; title: string; titleHi?: string };
   brand?: { slug: string; name: string };
-  finishes: Finish[];
+  /** Power in watts, when the listing is for one wattage. */
+  wattage?: number;
+  lightColours: LightColour[];
+  bodyColours: BodyColour[];
   use: Use[];
   specs: Spec[];
   description?: string;

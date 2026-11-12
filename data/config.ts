@@ -14,7 +14,7 @@ export const CONFIG: SiteSettings = {
   city: "Ulhasnagar",
   region: "Maharashtra",
   countryCode: "IN",
-  trade: "Electrical products supplier, wholesale and retail",
+  trade: "LED lighting supplier, wholesale and retail",
 
   whatsappNumber: "", // [ADD: WhatsApp number with country code, e.g. 91XXXXXXXXXX]
   phone: "", // [ADD: shop phone number]
@@ -32,26 +32,23 @@ export const CONFIG: SiteSettings = {
 
   brandsStocked: [], // [ADD: brands stocked, plain text]
   strongestLines: [
-    "Modular switches",
-    "Sockets",
-    "Dimmers and regulators",
-    "LED lighting",
-    "Cove and profile lights",
-    "Wires and cables",
-    "MCBs and distribution",
-    "Fans",
-    "Smart home",
+    "Panel lights",
+    "COB downlights",
+    "Strip lights",
+    "Rope lights",
+    "Profile lights",
+    "Track and spot lights",
+    "Outdoor and flood lights",
+    "LED drivers",
   ],
   deliveryAreas: [], // [ADD: delivery areas]
   deliveryPromise: "", // [ADD: delivery promise]
   quoteResponseTime: "", // [ADD: how fast you reply to quotes]
 
-  // Rendered by the render studio (/render → "Record hero video"). Set to null for the still photo only.
-  heroVideo: "/video/hero-marble-apartment.mp4",
   headlines: [
-    "Light, power and control, chosen with care.",
-    "Everything behind the wall, and everything on it.",
-    "From the first wire to the last switch plate.",
+    "The right light for every room.",
+    "Lighting that finishes the space.",
+    "From the first downlight to the last strip.",
   ],
 };
 

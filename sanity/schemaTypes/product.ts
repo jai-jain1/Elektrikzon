@@ -2,7 +2,8 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { BoxIcon } from "../lib/icons";
 import { altField } from "../lib/fields";
 
-const FINISH_OPTIONS = ["Matte White", "Charcoal", "Champagne Gold", "Walnut", "Black", "Silver", "Other"];
+const LIGHT_COLOUR_OPTIONS = ["Warm white", "Neutral white", "Cool white", "3-in-1", "RGB"];
+const BODY_COLOUR_OPTIONS = ["White", "Black", "Grey", "Silver", "Gold", "Other"];
 const USE_OPTIONS = ["Living room", "Bedroom", "Kitchen", "Bathroom", "Office", "Outdoor", "Commercial", "Industrial"];
 
 export const product = defineType({
@@ -10,7 +11,7 @@ export const product = defineType({
   title: "Product",
   type: "document",
   icon: BoxIcon,
-  description: "One product in the catalogue. Prices are never shown; visitors request a trade price on WhatsApp.",
+  description: "One light in the catalogue. Add a selling price to sell it online; without one, visitors request a trade price on WhatsApp.",
   groups: [
     { name: "basics", title: "Basics", default: true },
     { name: "details", title: "Details and specs" },
@@ -23,7 +24,7 @@ export const product = defineType({
       title: "Product name",
       type: "string",
       group: "basics",
-      description: "Shown on the product card and page. Keep it plain, e.g. “2-Module Socket”.",
+      description: "Shown on the product card and page. Keep it plain, e.g. “Slim Round Panel Light 12 W”.",
       validation: (rule) => rule.required().error("Please type the product name."),
     }),
     defineField({
@@ -42,7 +43,7 @@ export const product = defineType({
       type: "reference",
       group: "basics",
       to: [{ type: "category" }],
-      description: "Which main section of the catalogue this product belongs to.",
+      description: "Which type of light this is, e.g. Panel Lights or Strip Lights.",
       validation: (rule) => rule.required().error("Please choose a category."),
     }),
     defineField({
@@ -86,13 +87,30 @@ export const product = defineType({
       initialValue: true,
     }),
     defineField({
-      name: "finishes",
-      title: "Finishes",
+      name: "wattage",
+      title: "Wattage (W)",
+      type: "number",
+      group: "details",
+      description: "Just the number, e.g. 12. If the same light comes in several wattages at different prices, add one product per wattage.",
+      validation: (rule) => rule.min(0.1).max(2000).error("Please enter the wattage as a number, e.g. 12."),
+    }),
+    defineField({
+      name: "lightColours",
+      title: "Light colours available",
       type: "array",
       group: "details",
-      description: "Tick every finish you can supply. Used by the catalogue filter.",
+      description: "Tick every light colour you can supply. Customers choose one when they order. Warm is about 3000 K, Neutral about 4000 K, Cool about 6500 K.",
       of: [defineArrayMember({ type: "string" })],
-      options: { list: FINISH_OPTIONS.map((f) => ({ title: f, value: f })) },
+      options: { list: LIGHT_COLOUR_OPTIONS.map((c) => ({ title: c, value: c })) },
+    }),
+    defineField({
+      name: "bodyColours",
+      title: "Body colours available",
+      type: "array",
+      group: "details",
+      description: "The colour of the fitting itself (trim, body or profile). Tick every one you can supply.",
+      of: [defineArrayMember({ type: "string" })],
+      options: { list: BODY_COLOUR_OPTIONS.map((c) => ({ title: c, value: c })) },
     }),
     defineField({
       name: "use",
@@ -108,7 +126,7 @@ export const product = defineType({
       title: "Specifications",
       type: "array",
       group: "details",
-      description: "Shown as a table on the product page, e.g. Label “Module size”, Value “2 modules”. Only add facts you are sure of.",
+      description: "Shown as a table on the product page, e.g. Label “Cut-out size”, Value “75 mm”. Other useful labels: Lumens, Beam angle, IP rating, Voltage, Length per roll, Warranty. Only add facts you are sure of.",
       of: [
         defineArrayMember({
           type: "object",
@@ -155,7 +173,7 @@ export const product = defineType({
       title: "MRP in ₹ (optional)",
       type: "number",
       group: "details",
-      description: "Leave empty if you do not want to show an MRP. Trade prices are never shown on the site.",
+      description: "Leave empty if you do not want to show an MRP. When it is higher than the selling price, it is shown crossed out.",
       validation: (rule) => rule.min(0).error("MRP cannot be negative."),
     }),
     defineField({

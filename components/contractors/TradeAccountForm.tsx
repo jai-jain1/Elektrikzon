@@ -11,12 +11,12 @@ import { Placeholder } from "@/components/ui/Placeholder";
 import { WhatsAppIcon } from "@/components/ui/icons";
 
 const INTERESTS = [
-  { en: "Wires and cables", hi: "वायर और केबल" },
-  { en: "MCBs and distribution", hi: "MCB और डिस्ट्रीब्यूशन" },
-  { en: "Conduits and fittings", hi: "कंड्यूट और फ़िटिंग" },
-  { en: "Switches and sockets", hi: "स्विच और सॉकेट" },
-  { en: "Lighting", hi: "लाइटिंग" },
-  { en: "Fans", hi: "पंखे" },
+  { en: "Panel lights", hi: "पैनल लाइट" },
+  { en: "COB and downlights", hi: "COB और डाउनलाइट" },
+  { en: "Strip and rope lights", hi: "स्ट्रिप और रोप लाइट" },
+  { en: "Profile lights", hi: "प्रोफ़ाइल लाइट" },
+  { en: "Outdoor and flood lights", hi: "आउटडोर और फ़्लड लाइट" },
+  { en: "Drivers and accessories", hi: "ड्राइवर और एक्सेसरीज़" },
 ];
 
 const VOLUMES = [

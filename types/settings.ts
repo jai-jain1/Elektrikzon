@@ -33,8 +33,6 @@ export interface SiteSettings {
   deliveryPromise: string;
   quoteResponseTime: string;
 
-  /** Local MP4 in /public (e.g. "/video/hero.mp4") or a URL; null = 3D/CSS hero. */
-  heroVideo: string | null;
   /** Three hero headline options; the first is used. */
   headlines: [string, string, string];
 }

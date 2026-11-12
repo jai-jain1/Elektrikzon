@@ -9,7 +9,7 @@ You do not need to touch any code.
 
 1. Go to **your website address + `/studio`**
    - On your computer while testing: `http://localhost:3000/studio`
-   - When the site is live: for example `https://elektrikzone.vercel.app/studio`
+   - When the site is live: for example `https://elektrikzon.netlify.app/studio`
 2. Click **Log in** and choose the same Google / GitHub / email account you used to create the Sanity project.
 3. The menu on the left is your control panel:
    - **Start here**: a short reminder of these steps
@@ -46,44 +46,44 @@ Fields that still say `[ADD: …]` show a yellow warning. Replace them with your
 
 ---
 
-## 3. Add a category
+## 3. Types of light (categories)
 
-1. Click **Categories** → the **pencil** icon (top of the list) to create a new one.
-2. **Category name**, e.g. `Lighting`. Optional Hindi name.
-3. **Web address**: click **Generate**.
-4. **How it looks on the homepage**:
-   - *Editorial*: a large photo tile (best for Switches and Lighting)
-   - *Technical*: a compact row (best for wires, MCBs, conduits)
-   - *Standard*: a normal tile
-5. **Cover photo** (optional): a landscape photo, about 1600 px wide. Fill in the alt text.
-6. **Sort order**: 1, 2, 3… (lower numbers come first).
-7. **Publish**.
+The website is organised by **type of light**. Eight are already there: Panel Lights, COB and Downlights, Strip Lights, Rope Lights, Profile Lights, Track and Spot Lights, Outdoor and Flood Lights, Drivers and Accessories. Each one has a rendered picture on the homepage.
 
-Subcategories work the same way. Pick the main category they belong to.
+- **You do not stock one of them?** Open it in **Categories**, click the **⋯** menu next to Publish → **Delete**. (Move or delete its products first.)
+- **To add a new type:** **Categories** → the **pencil** icon → **Category name** (e.g. `Hanging Lights`), click **Generate** for the web address, add a short description, set the **Sort order** (1, 2, 3… lower numbers come first) and **Publish**. Add a **Cover photo** (landscape, about 1600 px wide), because new types have no built-in picture.
+- A **Cover photo** on one of the eight built-in types replaces its rendered picture.
+
+**Subcategories** are optional smaller groups inside a type (for example “Surface” and “Slim” inside Panel Lights). Skip them unless you need them.
 
 ---
 
-## 4. Add a product with photos
+## 4. Add a light with photos
 
-The easiest way: **Products by category** → pick the category → **pencil** icon. The category is filled in for you.
+The easiest way: **Products by category** → pick the type of light → **pencil** icon. The category is filled in for you.
 
 **Basics tab**
-- **Product name**, e.g. `2-Module Socket`
-- **Product ID**: click **Generate**. This ID appears in WhatsApp quotes, so do not change it later.
-- **Subcategory** and **Brand** (optional; brands are shown as plain text, no logos)
-- **Feature on the homepage**: turn ON to show it in the Featured row
+- **Product name**, e.g. `Slim Round Panel Light 12 W`
+- **Product ID**: click **Generate**. This ID appears in WhatsApp quotes and orders, so do not change it later.
+- **Brand** (optional; brands are shown as plain text, no logos)
+- **Feature on the homepage**: turn ON to show it first under “Popular lights”
 - **Sample listing**: **turn this OFF for real products.** While it is on, the site shows a “Sample listing” tag.
 
 **Details and specs tab**
-- Tick the **Finishes** and **Where it is used** (these power the catalogue filters)
-- **Specifications**: add rows such as `Module size` → `2 modules`. Only facts you are sure of.
+- **Wattage (W)**: just the number, e.g. `12`. If the same light comes in 6 W, 12 W and 18 W at different prices, add **one product per wattage**.
+- **Light colours available**: tick Warm white (about 3000 K), Neutral white (about 4000 K), Cool white (about 6500 K), 3-in-1 or RGB. With more than one ticked, the customer chooses when ordering.
+- **Body colours available**: White, Black and so on. Again the customer chooses.
+- **Where it is used**: rooms and project types.
+- **Specifications**: extra rows such as `Cut-out size` → `75 mm`, `Beam angle`, `IP rating`, `Length per roll`, `Warranty`. Only facts you are sure of.
 - **Description**: a few plain sentences. No claims (ratings, certifications) unless they are true for this exact product.
-- **MRP**: leave empty if you do not want to show an MRP. Trade prices are never shown.
+- **Selling price** and **MRP**: see section 7.
 - **Availability note**: e.g. “Check availability on WhatsApp”. Never promise stock.
+
+Wattage, light colours and body colours also power the catalogue filters, so fill them in for every product.
 
 **Photos tab**
 - Drag photos in. **The first photo is the main one.**
-- For every photo, fill in **Alt text** named after the product, e.g. “Charcoal 2-module switch plate”.
+- For every photo, fill in **Alt text** named after the product, e.g. “Round 12 W panel light, white trim”.
 - Click a photo and use the **crop / hotspot** tool to choose the part that must always stay visible.
 
 **Hindi tab**: optional Hindi name and description.
@@ -95,15 +95,15 @@ Press **Publish**.
 - **Size:** about **1200 px wide**, **under 500 KB**
 - **Background:** clear and plain (white, grey or a clean wall)
 - **Light:** daylight from a window, no harsh flash
-- **Angle:** straight on, plus one close-up of the finish
-- **Alt text:** name it after the product and finish
+- **Angle:** straight on, plus one shot with the light switched on
+- **Alt text:** name it after the product and its colour
 - No watermarks, and no brand logos you are not allowed to use
 
 ---
 
 ## 5. Turn off the Sample flag
 
-The website starts with 12 **sample listings**. For each one, either:
+The website starts with 8 **sample listings**, one for each type of light. For each one, either:
 - replace its details with a real product, add photos, switch **Sample listing** OFF and **Publish**, or
 - open it, click the **⋯** menu next to Publish → **Delete**, if you do not need it.
 

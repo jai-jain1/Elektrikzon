@@ -22,11 +22,19 @@ export const FAQ: FaqItem[] = [
     },
   },
   {
+    id: "colour",
+    q: { en: "Warm, neutral or cool white: which should I choose?", hi: "वॉर्म, न्यूट्रल या कूल व्हाइट: कौन-सा चुनें?" },
+    a: {
+      en: "Warm white (about 3000 K) feels relaxed and suits living rooms and bedrooms. Neutral white (about 4000 K) suits kitchens and work areas. Cool white (about 6500 K) looks the crispest and is common in shops and utility areas. You can compare all three in the Light Lab.",
+      hi: "वॉर्म व्हाइट (लगभग 3000 K) आरामदायक लगता है और लिविंग रूम व बेडरूम के लिए अच्छा है। न्यूट्रल व्हाइट (लगभग 4000 K) किचन और काम की जगहों के लिए ठीक है। कूल व्हाइट (लगभग 6500 K) सबसे तेज़ दिखता है और दुकानों व यूटिलिटी एरिया में आम है। तीनों को लाइट लैब में देखकर तुलना करें।",
+    },
+  },
+  {
     id: "quote",
     q: { en: "How do I get a quote?", hi: "कोटेशन कैसे मिलेगा?" },
     a: {
-      en: "Add products, switch plates or a lighting brief to your quote list, then press “Send list on WhatsApp”. The message includes product IDs so we can find each item. We usually reply {reply}.",
-      hi: "प्रोडक्ट, स्विच प्लेट या लाइटिंग ब्रीफ़ अपनी कोटेशन लिस्ट में जोड़ें, फिर “लिस्ट WhatsApp पर भेजें” दबाएँ। मैसेज में प्रोडक्ट ID होते हैं ताकि हम हर आइटम ढूँढ सकें। हम आम तौर पर {reply} जवाब देते हैं।",
+      en: "Add lights or a Light Lab brief to your list, then press “Send list on WhatsApp”. The message includes product IDs so we can find each item. We usually reply {reply}.",
+      hi: "लाइट या लाइट लैब का ब्रीफ़ अपनी लिस्ट में जोड़ें, फिर “लिस्ट WhatsApp पर भेजें” दबाएँ। मैसेज में प्रोडक्ट ID होते हैं ताकि हम हर आइटम ढूँढ सकें। हम आम तौर पर {reply} जवाब देते हैं।",
     },
   },
   {
@@ -73,10 +81,10 @@ export const FAQ: FaqItem[] = [
   },
   {
     id: "safety",
-    q: { en: "Can you install the wiring?", hi: "क्या आप वायरिंग लगाते हैं?" },
+    q: { en: "Do you install the lights?", hi: "क्या आप लाइट लगाते भी हैं?" },
     a: {
-      en: "We supply the products. Electrical installation should always be done by a qualified electrician. Contractors can ask us about a trade account.",
-      hi: "हम प्रोडक्ट सप्लाई करते हैं। बिजली का काम हमेशा योग्य इलेक्ट्रीशियन से ही करवाएँ। कॉन्ट्रैक्टर ट्रेड अकाउंट के बारे में पूछ सकते हैं।",
+      en: "We supply the lights. Installation should always be done by a qualified electrician. Contractors can ask us about a trade account.",
+      hi: "हम लाइट सप्लाई करते हैं। फ़िटिंग हमेशा योग्य इलेक्ट्रीशियन से ही करवाएँ। कॉन्ट्रैक्टर ट्रेड अकाउंट के बारे में पूछ सकते हैं।",
     },
   },
 ];

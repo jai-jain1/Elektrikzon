@@ -30,7 +30,6 @@ export interface SanityCategory {
   slug?: string;
   description?: string;
   descriptionHi?: string;
-  displayStyle?: "editorial" | "technical" | "standard";
   coverImage?: SanityImage | null;
   order?: number;
 }
@@ -57,7 +56,9 @@ export interface SanityProduct {
   category?: SanityRefTitle | null;
   subcategory?: SanityRefTitle | null;
   brand?: { name?: string; slug?: string } | null;
-  finishes?: string[] | null;
+  wattage?: number | null;
+  lightColours?: string[] | null;
+  bodyColours?: string[] | null;
   use?: string[] | null;
   specs?: { label?: string; value?: string }[] | null;
   description?: string;
@@ -120,6 +121,5 @@ export interface SanitySiteSettings {
   deliveryAreas?: string[] | null;
   deliveryPromise?: string;
   quoteResponseTime?: string;
-  heroVideoUrl?: string;
   headlines?: string[] | null;
 }

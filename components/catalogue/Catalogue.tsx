@@ -2,11 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Brand, Category, Product, Subcategory } from "@/types/catalog";
-import { FINISHES, USES } from "@/types/catalog";
+import { BODY_COLOURS, LIGHT_COLOURS, USES } from "@/types/catalog";
 import { EMPTY_FILTERS, facetCounts, filterProducts, FILTER_KEYS, type FacetKey, type FilterState } from "@/lib/filter";
 import { fmt, useT } from "@/lib/i18n";
 import { useLang } from "@/lib/prefs";
 import { localized } from "@/lib/localize";
+import { LIGHT_COLOUR_KEY } from "@/lib/lighting";
 import { ProductCard } from "@/components/product/ProductCard";
 import { QuickView } from "@/components/product/QuickView";
 import { CloseIcon, FilterIcon, SearchIcon } from "@/components/ui/icons";
@@ -25,18 +26,13 @@ interface Option {
   label: string;
 }
 
-/** Read filters from the URL (?category=lighting&q=dimmer) so links are shareable. */
+/** Read filters from the URL (?category=strip-lights&cct=Warm+white) so links are shareable. */
 function readUrl(): FilterState {
   try {
     const p = new URLSearchParams(window.location.search);
-    return {
-      q: p.get("q") ?? "",
-      category: p.get("category") ?? "",
-      subcategory: p.get("subcategory") ?? "",
-      brand: p.get("brand") ?? "",
-      finish: p.get("finish") ?? "",
-      use: p.get("use") ?? "",
-    };
+    const next = { ...EMPTY_FILTERS };
+    (Object.keys(next) as (keyof FilterState)[]).forEach((k) => (next[k] = p.get(k) ?? ""));
+    return next;
   } catch {
     return EMPTY_FILTERS;
   }
@@ -53,6 +49,9 @@ function writeUrl(f: FilterState) {
   }
 }
 
+const chip =
+  "inline-flex min-h-[36px] items-center whitespace-nowrap rounded-full border px-3.5 text-xs text-muted transition-colors hairline hover:text-fg peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-fg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-amber";
+
 export function Catalogue({ products, categories, subcategories, brands }: Props) {
   const t = useT();
   const lang = useLang();
@@ -67,7 +66,7 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
   const update = useCallback((patch: Partial<FilterState>) => {
     setFilters((prev) => {
       const next = { ...prev, ...patch };
-      // A subcategory only makes sense inside its category.
+      // A style only makes sense inside its type of light.
       if (patch.category !== undefined && patch.category !== prev.category) next.subcategory = "";
       writeUrl(next);
       return next;
@@ -83,6 +82,8 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
   // Facet options with live counts; only values that exist in the catalogue.
   const facets = useMemo(() => {
     const count = (key: FacetKey, valueOf: (p: Product) => string[]) => facetCounts(products, filters, key, valueOf);
+    const listed = (values: readonly string[], counts: Map<string, number>, label: (v: string) => string = (v) => v): Option[] =>
+      values.filter((v) => counts.has(v)).map((v) => ({ value: v, label: `${label(v)} (${counts.get(v)})` }));
 
     const catCounts = count("category", (p) => [p.category.slug]);
     const category: Option[] = categories
@@ -94,6 +95,15 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
       .filter((s) => (!filters.category || s.categorySlug === filters.category) && subCounts.has(s.slug))
       .map((s) => ({ value: s.slug, label: `${localized(lang, s.title, s.titleHi)} (${subCounts.get(s.slug)})` }));
 
+    const cct = listed(LIGHT_COLOURS, count("cct", (p) => p.lightColours), (v) => t(LIGHT_COLOUR_KEY[v as (typeof LIGHT_COLOURS)[number]]));
+
+    const wattCounts = count("watt", (p) => (p.wattage ? [String(p.wattage)] : []));
+    const watt: Option[] = Array.from(wattCounts.keys())
+      .sort((a, b) => Number(a) - Number(b))
+      .map((w) => ({ value: w, label: `${w} W (${wattCounts.get(w)})` }));
+
+    const body = listed(BODY_COLOURS, count("body", (p) => p.bodyColours));
+
     const brandCounts = count("brand", (p) => (p.brand ? [p.brand.slug || p.brand.name] : []));
     const brandNames = new Map(brands.map((b) => [b.slug, b.name]));
     products.forEach((p) => p.brand && brandNames.set(p.brand.slug || p.brand.name, p.brand.name));
@@ -101,14 +111,10 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
       .filter(([slug]) => brandCounts.has(slug))
       .map(([slug, name]) => ({ value: slug, label: `${name} (${brandCounts.get(slug)})` }));
 
-    const finishCounts = count("finish", (p) => p.finishes);
-    const finish: Option[] = FINISHES.filter((f) => finishCounts.has(f)).map((f) => ({ value: f, label: `${f} (${finishCounts.get(f)})` }));
+    const use = listed(USES, count("use", (p) => p.use));
 
-    const useCounts = count("use", (p) => p.use);
-    const use: Option[] = USES.filter((u) => useCounts.has(u)).map((u) => ({ value: u, label: `${u} (${useCounts.get(u)})` }));
-
-    return { category, subcategory, brand, finish, use };
-  }, [products, categories, subcategories, brands, filters, lang]);
+    return { category, subcategory, cct, watt, body, brand, use };
+  }, [products, categories, subcategories, brands, filters, lang, t]);
 
   const hasSamples = results.some((p) => p.sample);
   const shown = results.slice(0, limit);
@@ -116,10 +122,20 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
   const groups: { key: FacetKey; label: string; options: Option[] }[] = [
     { key: "category", label: t("cat.category"), options: facets.category },
     { key: "subcategory", label: t("cat.subcategory"), options: facets.subcategory },
+    { key: "cct", label: t("cat.cct"), options: facets.cct },
+    { key: "watt", label: t("cat.watt"), options: facets.watt },
+    { key: "body", label: t("cat.body"), options: facets.body },
     { key: "brand", label: t("cat.brand"), options: facets.brand },
-    { key: "finish", label: t("cat.finish"), options: facets.finish },
     { key: "use", label: t("cat.use"), options: facets.use },
   ];
+
+  const radios = (key: FacetKey, options: Option[], name: string) =>
+    [{ value: "", label: t("cat.all") }, ...options].map((o) => (
+      <label key={o.value || "all"} className="shrink-0 cursor-pointer">
+        <input type="radio" name={name} value={o.value} checked={filters[key] === o.value} onChange={() => update({ [key]: o.value } as Partial<FilterState>)} className="peer sr-only" />
+        <span className={chip}>{o.label}</span>
+      </label>
+    ));
 
   const filterPanel = (
     <div className="space-y-7">
@@ -128,23 +144,7 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
         .map((g) => (
           <fieldset key={g.key}>
             <legend className="eyebrow mb-3 font-sans">{g.label}</legend>
-            <div className="flex flex-wrap gap-2">
-              {[{ value: "", label: t("cat.all") }, ...g.options].map((o) => (
-                <label key={o.value || "all"} className="cursor-pointer">
-                  <input
-                    type="radio"
-                    name={`f-${g.key}`}
-                    value={o.value}
-                    checked={filters[g.key] === o.value}
-                    onChange={() => update({ [g.key]: o.value } as Partial<FilterState>)}
-                    className="peer sr-only"
-                  />
-                  <span className="inline-flex min-h-[36px] items-center rounded-full border px-3.5 text-xs text-muted transition-colors hairline hover:text-fg peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-fg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-amber">
-                    {o.label}
-                  </span>
-                </label>
-              ))}
-            </div>
+            <div className="flex flex-wrap gap-2">{radios(g.key, g.options, `f-${g.key}`)}</div>
           </fieldset>
         ))}
       {activeCount > 0 && (
@@ -184,7 +184,15 @@ export function Catalogue({ products, categories, subcategories, brands }: Props
         </button>
       </div>
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-[17rem_1fr]">
+      {/* Phones: the types of light as a swipe row, so the main choice is one tap away. */}
+      {facets.category.length > 0 && (
+        <fieldset className="-mx-4 mt-4 lg:hidden">
+          <legend className="sr-only">{t("cat.category")}</legend>
+          <div className="flex gap-2 overflow-x-auto px-4 pb-1">{radios("category", facets.category, "m-category")}</div>
+        </fieldset>
+      )}
+
+      <div className="mt-6 grid gap-10 lg:mt-8 lg:grid-cols-[17rem_1fr]">
         <aside id="catalogue-filters" aria-label={t("cat.filters")} className={`${panelOpen ? "block" : "hidden"} lg:block`}>
           <div className="lg:sticky lg:top-40">
             <div className="mb-4 flex items-center justify-between lg:hidden">

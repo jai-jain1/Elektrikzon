@@ -4,7 +4,7 @@ import { DesignersPage } from "@/components/designers/DesignersPage";
 export const metadata: Metadata = {
   title: "For Designers",
   description:
-    "Interior designers and architects: paste your product list, plan lighting in the Light Lab and get one quote back from ElektrikZone on WhatsApp.",
+    "Interior designers and architects: paste your lighting schedule, settle the light in the 3D Light Lab and get one quote back from ElektrikZone on WhatsApp.",
   alternates: { canonical: "/designers" },
   openGraph: { title: "For Designers · ElektrikZone", url: "/designers" },
 };
